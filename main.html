@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://aframe.io/releases/0.9.1/aframe.min.js"></script>
+    <script src="./code.js" defer></script>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.js"></script>
+  </head>  
+  <body>
+    <a-scene physics="debug: false; friction: 0; restitution: 0;">
+		<a-entity id='cameraWrapper' position="0 0 0">
+			<a-camera></a-camera>
+		</a-entity>
+		<!-- ADD EMELENTS BY JAVASCRIPT createBox(...) function -->
+    </a-scene>
+  </body>
+</html>
