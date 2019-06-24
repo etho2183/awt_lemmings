@@ -9,9 +9,10 @@
   </head>  
   <body>
     <a-scene physics="debug: false; friction: 0; restitution: 0;">
-		<a-entity id='cameraWrapper' position="0 0 0">
-			<a-camera></a-camera>
-		</a-entity>
+		<a-assets>
+			<a-asset-item id="lemming_walk" src="./lemming_walk.glb"></a-asset-item>
+		</a-assets>
+		<!-- ADD CAMERA BY JAVASCRIPT loadCamera() function -->
 		<!-- ADD EMELENTS BY JAVASCRIPT createBox(...) function -->
     </a-scene>
   </body>

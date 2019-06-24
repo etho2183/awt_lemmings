@@ -1,10 +1,11 @@
+
 var latestLemming;
 var lemmingId;
 var objectId;
 var lemmingHeight = 1;
 var lemmingWidth = 0.5;
 var velocity = 2;
-var distance = -9;
+var lemmingsArrived;
 
 function collisionFunction(e)
 {	
@@ -16,7 +17,8 @@ function collisionFunction(e)
 	{
 		//console.log("-------------------------------------");
 		//console.log("collision with velocity: " + this.body.velocity.x);
-		console.log(this.id + ": collision skipped");
+		console.log(this.id + ": collision skipped (v: " + this.body.velocity.x + ")");
+		if ( (this.getAttribute("task") == "walking") && (getLemming(this.id) != null) ) setTimeout(setVelocity, 100, this, "maintain");
 		return; // we get four events per collision. Ignore the last three for now
 	}
 	this.setAttribute("lastCollision", e.detail.body.el.id); 
@@ -28,7 +30,8 @@ function collisionFunction(e)
 	
 	if(e.detail.body.el.id == "exit")
 	{
-		console.log(this.id + ": reached destination. Removing.");
+		lemmingsArrived++;
+		console.log(this.id + ": reached destination. Removing. Total arrived: " + lemmingsArrived);
 		this.parentNode.removeChild(this);	// throws an error but seems to work fine
 		return;
 	}
@@ -52,26 +55,29 @@ function collisionFunction(e)
 	// there is no continuous collision checking, only periodically. Fast objects clip into other objects, until a collision is registered
 	// faster objects clip further into other objects, resulting in a higher delta (at vertical speeds). Avoid high acceleration! Mostly caused by falling.
 
-	console.log(this.id + ": task: " + this.getAttribute("task"));
+	console.log(this.id + ": task: " + this.getAttribute("task") + " == falling: " + (this.getAttribute("task") == "falling"));
 	if (this.getAttribute("task") == "falling")
 	{
 		console.log(this.id + ": should be walking");
-		this.removeAttribute("task");
+		//this.removeAttribute("task");
 		this.setAttribute("task", "walking");
-		this.setAttribute("color", "#33cc33");
+		//setTimeout(function(e) {e.setAttribute("task", "walking");}, 100, this);
+		//this.removeAttribute("color");
+		setTimeout(function(e) {e.setAttribute("color", "#33cc33");}, 100, this);
 		setTimeout(setVelocity, 100, this, "maintain");
-		
+		//this.removeAttribute("lastCollision");
+		return;
 	}
 
 	if ((delta < 0.09) && (delta > -0.09))	// collision with floor
 	{
-		if (this.body.velocity.y < -9.9)
+		if (this.body.velocity.y < -9.5)
 		{
 			killLemming(this.id);
 			return;
 		}	
 	}
-	if ((delta > 0.09) && (delta < 0.11))	// collision with stair or other climbable object
+	if ((delta > 0.09) && (delta < 0.11) && (e.detail.body.el.className == "stair") )	// collision with stair
 	{
 		console.log(this.id + ": walking up stairs");
 		var x = this.body.position.x;
@@ -80,6 +86,7 @@ function collisionFunction(e)
 
 		this.body.velocity.set(0,3.6,0);
 		setTimeout(setVelocity, 30, this, "maintain");
+		return;
 	}
 
 	if ((delta > 0.11))	// collision with wall or ceiling
@@ -104,7 +111,7 @@ function collisionFunction(e)
 		{
 			console.log(this.id +  ": aborted building stairs");
 			clearTimeout(timer);
-			this.sremoveAttribute("timer");
+			this.removeAttribute("timer");
 			setTimeout(setVelocity, 10, this, "maintain");
 		}
 		
@@ -124,9 +131,10 @@ function turnAround(lemming)
 	{
 		lemming.setAttribute("direction", "right");
 	}
-	if (vel * vel > 0.1)				setTimeout(setVelocity, 100, lemming, "maintain");
-	else								setTimeout(setVelocity, 100, lemming, 0);
-	console.log("velocity after turning: " + lemming.body.velocity.x);
+	//if (vel * vel > 0.1)				setTimeout(setVelocity, 100, lemming, "maintain");
+	//else								setTimeout(setVelocity, 100, lemming, 0);
+	setTimeout(setVelocity, 100, lemming, "maintain");
+	console.log(lemming.id + ": velocity after turning: " + lemming.body.velocity.x);
 
 	// reset lemming collision group
 	lemming.body.collisionFilterGroup = 2;
@@ -136,12 +144,16 @@ function turnAround(lemming)
 // used as timed function when climbing stairs
 function setVelocity(object, v)
 {
-	if (v == "maintain")
+	if (object.getAttribute("task") == "walking")
 	{
-		if (object.getAttribute("direction") == "right") 	v = velocity;
-		else												v = -velocity;
+		if (v == "maintain")
+		{
+			if (object.getAttribute("direction") == "right") 	v = velocity;
+			else												v = -velocity;
+		}
+		console.log(object.id + ": setting velocity to " + v);
+		object.body.velocity.set(v,0,0);
 	}
-	object.body.velocity.set(v,0,0);
 }
 
 function getLemming(id)
@@ -232,13 +244,13 @@ function digDown(id)
 	}
 	lemming.setAttribute("color" , "#55AA55");
 	lemming.body.velocity.set(0,0.1,0);
+	lemming.setAttribute("task", "digDown");
 	setTimeout(digDownPartTwo, 200, lemming);
 }
 
 // split floor into three parts: left side, right side and tunnel element in center that gets smaller until it disappears
 function digDownPartTwo(lemming)
 {
-	lemming.setAttribute("task", "digDown");
 	var floorId = lemming.getAttribute("lastCollision");
 	var floor = document.querySelector("#"+floorId);
 	var halfFloorWidth = floor.getAttribute("width") / 2;
@@ -385,7 +397,6 @@ function buildStairs(id, counter)
 		lemming.body.position.set(posX, lemmingY+0.11, lemmingZ);
 		
 	}
-	lemming.setAttribute("task", "walking");
 }
 
 function setStair(pos, direction)
@@ -418,6 +429,11 @@ function updateVelocities(){
 	function updateVelocity(lemming, index){
 		if (lemming.getAttribute("task") == "walking")
 		{
+			setVelocity(lemming, "maintain");
+		}
+		if ((lemming.getAttribute("task") == "falling") && (lemming.body.velocity.y == 0))
+		{
+			lemming.setAttribute("task", "walking");
 			setVelocity(lemming, "maintain");
 		}
 		else	setVelocity(lemming, 0);
@@ -472,6 +488,7 @@ function clearLevel()
 
 function setAlphaLevel()
 {
+	loadCamera();
 	createBox(4, 0.1, 1, "2 3.5 -4", "floor", "");
 	createBox(6, 0.1, 4, "-1 1.5 -4", "floor", "");
 	createBox(8, 0.1, 4, "0 0 -4", "floor", "");
@@ -485,43 +502,43 @@ function setAlphaLevel()
 
 function setLevel1()
 {
+	loadCamera();
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
 	createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-	distance = -9;
-	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 0);
+	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
 
-	createBox(20, 1, 2, "0 0 " + distance, "floor", "");
-	createBox(10, 2, 2, "-5 4 " + distance, "floor", "");
-	createBox(1, 12, 2, "-10.5 5.5 " + distance, "wall", "");
-	createBox(1, 12, 2, "10.5 5.5 " + distance, "wall", "");
-	createBox(1, 6, 2, "5 8 " + distance, "wall", "");
+	createBox(20, 1, 2, "0 0 0", "floor", "");
+	createBox(10, 2, 2, "-5 4 0", "floor", "");
+	createBox(1, 12, 2, "-10.5 5.5 0", "wall", "");
+	createBox(1, 12, 2, "10.5 5.5 0", "wall", "");
+	createBox(1, 6, 2, "5 8 0", "wall", "");
 
-	createBox(1.2, 0.1, 1.2, "-5 8 " + distance, "", "spawner");
-	createBox(1.6, 2, 1.6, "7 1.5 " + distance, "", "exit");
+	createBox(1.2, 0.1, 1.2, "-5 8 0", "", "spawner");
+	createBox(1.6, 2, 1.6, "7 1.5 0", "", "exit");
 }
 
 function setLevel3()
 {
+	loadCamera();
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#336699");
 	document.querySelector("a-scene").appendChild(sky);
 
-	distance = -9;
-	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 0);
-	createBox(12, 0.1, 2, "-1 0 " + distance, "floor", "");
-	createBox(6, 0.1, 2, "10 0 " + distance, "floor", "");
-	createBox(10, 0.1, 2, "-4 3 " + distance, "floor", "");
-	createBox(8, 0.1, 2, "-1 4.5 " + distance, "floor", "");
-	createBox(10, 0.1, 2, "4 6 " + distance, "floor", "");
-	createBox(6, 0.1, 2, "-8 6 " + distance, "floor", "");
-	createBox(10, 0.1, 2, "-3 7.5 " + distance, "floor", "");
-	createBox(14, 0.1, 2, "4 9 " + distance, "floor", "");
+	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
+	createBox(12, 0.1, 2, "-1 0 0", "floor", "");
+	createBox(6, 0.1, 2, "10 0 0", "floor", "");
+	createBox(10, 0.1, 2, "-4 3 0", "floor", "");
+	createBox(8, 0.1, 2, "-1 4.5 0", "floor", "");
+	createBox(10, 0.1, 2, "4 6 0", "floor", "");
+	createBox(6, 0.1, 2, "-8 6 0", "floor", "");
+	createBox(10, 0.1, 2, "-3 7.5 0", "floor", "");
+	createBox(14, 0.1, 2, "4 9 0", "floor", "");
 	createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
 
-	createBox(1.2, 0.1, 1.2, "-1 11 " + distance, "", "spawner");
-	createBox(1.6, 2, 1.6, "10 1 " + distance, "", "exit");
+	createBox(1.2, 0.1, 1.2, "-1 11 0", "", "spawner");
+	createBox(1.6, 2, 1.6, "10 1 0", "", "exit");
 
 	// DEMO solver
 	/*
@@ -543,14 +560,28 @@ function setLevel3()
 	setTimeout(spawnLemming, 26000); */
 }
 
+function loadCamera()
+{
+	var wrapper = document.createElement("a-entity");
+	wrapper.setAttribute("id", "cameraWrapper");
+	var camera = document.createElement("a-camera");
+	wrapper.appendChild(camera);
+	document.querySelector("a-scene").appendChild(wrapper);
+}
+
 function checkFalling()
 {
 	var lemmings = document.querySelectorAll(".lemming");
 	function updateFall(lemming, index){
 		var task = lemming.getAttribute("task")
-		if (((task == "walking") || (task == "falling")) && (lemming.body.velocity.y < -0.5))
+		if (lemming.body.velocity.y < -0.5)	
+		{
+			lemming.body.velocity.x = 0;
+		}
+		if (((task == "walking") || (task == "falling")) && (lemming.body.velocity.y < -2))
 		{
 			lemming.setAttribute("task", "falling");
+			//console.log(lemming.id + ": lemming is falling with speed: " + lemming.body.velocity.y);
 			lemming.setAttribute("color", "orange");
 			lemming.body.velocity.x = 0;
 			if (lemming.getAttribute("hasChute") == "true") lemming.body.velocity.set(0, -1.5, 0);
@@ -560,10 +591,18 @@ function checkFalling()
 	lemmings.forEach(updateFall);
 }
 
+function spawnLemmings(num)
+{
+	if (num <= 0) return;
+	spawnLemming();
+	setTimeout(function() {spawnLemmings(num-1);}, 500);
+}
+
 window.onload = function() 
 {
 	lemmingId = 0;
 	objectId = 0;
+	lemmingsArrived = 0;
 
 	setInterval(checkFalling, 20); // 50 times per second. Could also be checked each time a frame is produced
 	//lemmings will be spawned by hand later
