@@ -61,6 +61,7 @@ function collisionFunction(e)
 		console.log(this.id + ": should be walking");
 		//this.removeAttribute("task");
 		this.setAttribute("task", "walking");
+		lemming.setAttribute("gltf-model", "#lemming_walk");
 		//setTimeout(function(e) {e.setAttribute("task", "walking");}, 100, this);
 		//this.removeAttribute("color");
 		setTimeout(function(e) {e.setAttribute("color", "#33cc33");}, 100, this);
@@ -185,7 +186,7 @@ function spawnLemming()
 	lemming.setAttribute("lastCollision", "");
 	lemming.setAttribute("id", "lemming"+lemmingId);
 	
-	lemming.setAttribute("task", "walking");
+	lemming.setAttribute("task", "falling");
 	//lemming.setAttribute("constraint", "target: #test; collideConnected: false;");
 
 	var text = document.createElement("a-text");
@@ -200,7 +201,7 @@ function spawnLemming()
 	{
 		console.log("body of lemming #" + this.body.id + " loaded");
 		this.body.fixedRotation = true;
-		this.setAttribute("velocity", velocity + " 0 0");
+		this.setAttribute("velocity", "0 0 0");
 		this.setAttribute("direction", "right");
 		this.body.collisionFilterGroup = 2;
 		this.body.collisionFilterMask = 1;
@@ -314,6 +315,7 @@ function shrink(object, vertical)
 			scene.removeChild(object);
 			clearInterval(object.getAttribute("shrinker"));
 			lemming.setAttribute("task", "walking");
+			lemming.setAttribute("gltf-model", "#lemming_walk");
 			lemming.setAttribute("color", "#33cc33");
 			
 			return;
@@ -368,6 +370,7 @@ function buildStairs(id, counter)
 	if (counter >= 11)	// stair finished, resume walking
 	{
 		lemming.setAttribute("task", "walking");
+		lemming.setAttribute("gltf-model", "#lemming_walk");
 		setVelocity(lemming, "maintain");
 		return;
 	}
@@ -434,6 +437,7 @@ function updateVelocities(){
 		if ((lemming.getAttribute("task") == "falling") && (lemming.body.velocity.y == 0))
 		{
 			lemming.setAttribute("task", "walking");
+			lemming.setAttribute("gltf-model", "#lemming_walk");
 			setVelocity(lemming, "maintain");
 		}
 		else	setVelocity(lemming, 0);
@@ -596,6 +600,18 @@ function spawnLemmings(num)
 	if (num <= 0) return;
 	spawnLemming();
 	setTimeout(function() {spawnLemmings(num-1);}, 500);
+}
+
+function updateModel(lemming)
+{
+	var task = lemming.getAttribute("task");
+	var dir = lemming.getAttribute("direction");
+	if ((task == "walking") && (dir == "left"))		lemming.setAttribute("gltf-model", "#lemming_walk_r");
+	if ((task == "walking") && (dir == "right"))	lemming.setAttribute("gltf-model", "#lemming_walk_l");
+	if ((task == "falling") && (dir == "right"))	lemming.setAttribute("gltf-model", "#lemming_fall_r");
+	if ((task == "falling") && (dir == "left"))		lemming.setAttribute("gltf-model", "#lemming_fall_l");
+	//if (task == "digDown")							lemming.setAttribute("gltf-model", "#lemming_digDown");
+	if (task == "stop")								lemming.setAttribute("gltf-model", "#lemming_stop");
 }
 
 window.onload = function() 
