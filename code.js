@@ -127,10 +127,12 @@ function turnAround(lemming)
 	if (dir == "right")	
 	{
 		lemming.setAttribute("direction", "left");
+		updateModel(lemming);
 	}
 	else
 	{
 		lemming.setAttribute("direction", "right");
+		updateModel(lemming);
 	}
 	//if (vel * vel > 0.1)				setTimeout(setVelocity, 100, lemming, "maintain");
 	//else								setTimeout(setVelocity, 100, lemming, 0);
@@ -229,6 +231,7 @@ function stopOthers(id)
 	}
 	lemming.removeEventListener("collide", collisionFunction);
 	lemming.setAttribute("task", "stop");
+	updateModel(lemming);
 	lemming.setAttribute("color", "#006600");
 	lemming.body.velocity.set(0,0,0);
 	lemming.body.invMass = 0;
@@ -247,6 +250,7 @@ function digDown(id)
 	lemming.setAttribute("color" , "#55AA55");
 	lemming.body.velocity.set(0,0.1,0);
 	lemming.setAttribute("task", "digDown");
+	updateModel(lemming);
 	setTimeout(digDownPartTwo, 200, lemming);
 }
 
@@ -586,6 +590,7 @@ function checkFalling()
 		if (((task == "walking") || (task == "falling")) && (lemming.body.velocity.y < -2))
 		{
 			lemming.setAttribute("task", "falling");
+			updateModel(lemming);
 			//console.log(lemming.id + ": lemming is falling with speed: " + lemming.body.velocity.y);
 			lemming.setAttribute("color", "orange");
 			lemming.body.velocity.x = 0;
