@@ -61,7 +61,7 @@ function collisionFunction(e)
 		console.log(this.id + ": should be walking");
 		//this.removeAttribute("task");
 		this.setAttribute("task", "walking");
-		lemming.setAttribute("gltf-model", "#lemming_walk");
+		updateModel(this);
 		//setTimeout(function(e) {e.setAttribute("task", "walking");}, 100, this);
 		//this.removeAttribute("color");
 		setTimeout(function(e) {e.setAttribute("color", "#33cc33");}, 100, this);
@@ -315,7 +315,7 @@ function shrink(object, vertical)
 			scene.removeChild(object);
 			clearInterval(object.getAttribute("shrinker"));
 			lemming.setAttribute("task", "walking");
-			lemming.setAttribute("gltf-model", "#lemming_walk");
+			updateModel(lemming);
 			lemming.setAttribute("color", "#33cc33");
 			
 			return;
@@ -370,7 +370,7 @@ function buildStairs(id, counter)
 	if (counter >= 11)	// stair finished, resume walking
 	{
 		lemming.setAttribute("task", "walking");
-		lemming.setAttribute("gltf-model", "#lemming_walk");
+		updateModel(lemming);
 		setVelocity(lemming, "maintain");
 		return;
 	}
