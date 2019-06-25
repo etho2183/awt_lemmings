@@ -215,6 +215,7 @@ function spawnLemming()
 	//lemming.setAttribute("constraint", "target: label"+lemmingId+"; type: lock");
 
 	latestLemming = lemming;
+	updateModel(lemming);
 	lemmingId++;
 }
 
@@ -437,7 +438,7 @@ function updateVelocities(){
 		if ((lemming.getAttribute("task") == "falling") && (lemming.body.velocity.y == 0))
 		{
 			lemming.setAttribute("task", "walking");
-			lemming.setAttribute("gltf-model", "#lemming_walk");
+			updateModel(lemming);
 			setVelocity(lemming, "maintain");
 		}
 		else	setVelocity(lemming, 0);
@@ -606,12 +607,12 @@ function updateModel(lemming)
 {
 	var task = lemming.getAttribute("task");
 	var dir = lemming.getAttribute("direction");
-	if ((task == "walking") && (dir == "left"))		lemming.setAttribute("gltf-model", "#lemming_walk_r");
-	if ((task == "walking") && (dir == "right"))	lemming.setAttribute("gltf-model", "#lemming_walk_l");
-	if ((task == "falling") && (dir == "right"))	lemming.setAttribute("gltf-model", "#lemming_fall_r");
-	if ((task == "falling") && (dir == "left"))		lemming.setAttribute("gltf-model", "#lemming_fall_l");
+	if ((task == "walking") && (dir == "left"))		lemming.setAttribute("gltf-model", "./Models/lemming_walk_l.glb");
+	if ((task == "walking") && (dir == "right"))	lemming.setAttribute("gltf-model", "./Models/lemming_walk_r.glb");
+	if ((task == "falling") && (dir == "left"))		lemming.setAttribute("gltf-model", "./Models/lemming_fall_l.glb");
+	if ((task == "falling") && (dir == "right"))	lemming.setAttribute("gltf-model", "./Models/lemming_fall_r.glb");
 	//if (task == "digDown")							lemming.setAttribute("gltf-model", "#lemming_digDown");
-	if (task == "stop")								lemming.setAttribute("gltf-model", "#lemming_stop");
+	if (task == "stop")								lemming.setAttribute("gltf-model", "./Models/lemming_stop.glb");
 }
 
 window.onload = function() 
