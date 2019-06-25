@@ -295,14 +295,18 @@ function digDownPartTwo(lemming)
 		tunnelX = rightX - rightWidth/2 - tunnelWidth/2;
 	}
 	// the lemming is not digging at the right end of the floor
-	if (rightWidth > 0) createBox(rightWidth, floorHeight, floorDepth, rightX + " " + floorPos.y + " " + floorPos.z, "floor", ""); 
+	if (rightWidth > 0) 
+	{
+		createBox(rightWidth, floorHeight, floorDepth, rightX + " " + floorPos.y + " " + floorPos.z, "floor", ""); 
+		console.log("right side width: " + rightWidth + " with x: " + rightX);
+	}
 	else // same as for the left side
 	{
 		tunnelWidth += rightWidth;
 		if (tunnelWidth < 0) tunnelWidth = tunnelWidth * -1;
 		tunnelX = leftX + leftWidth/2 + tunnelWidth/2;
 	}
-	var tunnel = createBox(tunnelWidth, floorHeight, floorDepth, tunnelX + " " + floorPos.y + " " + floorPos.z, "tunnel", "");
+	var tunnel = createBox(tunnelWidth, floorHeight, floorDepth, tunnelX + " " + floorPos.y + " " + floorPos.z, "floor", "");
 	var timerId = setInterval(shrink, 700, tunnel, true);
 	tunnel.setAttribute("shrinker", timerId);
 	tunnel.setAttribute("lemming", lemming.id);
@@ -456,6 +460,7 @@ function updateVelocities(){
 function createBox(width, height, depth, position, type, id)
 {
 	var box = document.createElement("a-box");
+	console.log("creating box with " + width + " * " + height + " * " + depth);
 	box.setAttribute("static-body", "");
 	box.setAttribute("width", width);
 	box.setAttribute("height", height);
@@ -468,9 +473,9 @@ function createBox(width, height, depth, position, type, id)
 		objectId++;
 	}
 	else box.setAttribute("id", id);
-	var color = "#ff33cc";
+	var color = "#ffFFFF";
 	if (type == "wall") color = "#f44141";
-	if (type == "floor") color = "#42d9f4";
+	if (type == "floor") color = "#5a2b08";
 	if ((id == "exit") || (id == "spawner")) color = "#00ff00";
 	if (id == "theVoid") color = "#000000";
 	box.setAttribute("color", color);
@@ -616,7 +621,7 @@ function updateModel(lemming)
 	if ((task == "walking") && (dir == "right"))	lemming.setAttribute("gltf-model", "./Models/lemming_walk_r.glb");
 	if ((task == "falling") && (dir == "left"))		lemming.setAttribute("gltf-model", "./Models/lemming_fall_l.glb");
 	if ((task == "falling") && (dir == "right"))	lemming.setAttribute("gltf-model", "./Models/lemming_fall_r.glb");
-	//if (task == "digDown")							lemming.setAttribute("gltf-model", "#lemming_digDown");
+	if (task == "digDown")							lemming.setAttribute("gltf-model", "./Models/lemming_digDown.glb");
 	if (task == "stop")								lemming.setAttribute("gltf-model", "./Models/lemming_stop.glb");
 }
 
