@@ -579,6 +579,8 @@ function loadCamera()
 	var wrapper = document.createElement("a-entity");
 	wrapper.setAttribute("id", "cameraWrapper");
 	var camera = document.createElement("a-camera");
+  var cursor = document.createElement("a-cursor");
+  camera.appendChild(cursor);
 	wrapper.appendChild(camera);
 	document.querySelector("a-scene").appendChild(wrapper);
 }
@@ -636,9 +638,9 @@ function createButton(position, source, onClick)
     const wasButtonSelected = box.getAttribute('data-selected');
     debugger
     if (wasButtonSelected) {
-      Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('onclick', onClick));
+      Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('click', onClick));
     } else {
-      Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('onclick', onClick));
+      Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('click', onClick));
     }
     
     box.setAttribute('data-selected', !wasButtonSelected);
@@ -657,6 +659,9 @@ window.onload = function()
 	lemmingId = 0;
 	objectId = 0;
 	lemmingsArrived = 0;
+  setTimeout(spawnLemming, 1000);
+  setTimeout(spawnLemming, 1000);
+  setTimeout(spawnLemming, 1000);
   setTimeout(spawnLemming, 1000);
 
 	setInterval(checkFalling, 20); // 50 times per second. Could also be checked each time a frame is produced
