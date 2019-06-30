@@ -221,15 +221,19 @@ function spawnLemming()
 	lemmingId++;
 }
 
-function stopOthers(id)
+function stopOthers(idOrLemming)
 {
   debugger
-	var lemming = getLemming(id);
-	if (lemming == null) 
-	{
-		console.log("Invalid lemming ID");
-		return false;
-	}
+  let lemming
+  if (typeof(idOrLemming) === 'string') {
+    	lemming = getLemming(idOrLemming);
+    if (lemming == null) 
+    {
+      console.log("Invalid lemming ID");
+      return false;
+    }
+  }
+  lemming = idOrLemming;
 	lemming.removeEventListener("collide", collisionFunction);
 	lemming.setAttribute("task", "stop");
 	updateModel(lemming);
