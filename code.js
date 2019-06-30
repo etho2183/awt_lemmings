@@ -632,13 +632,13 @@ function createButton(position, source, onClick)
   box.setAttribute('height', 2);
   box.setAttribute('width', 2);
   box.setAttribute('src', source);
-  box.addEventListener('onclick', onClick);
+  box.addEventListener('onclick', ();
 	document.querySelector("a-scene").appendChild(box);
 }
 
 function setUIToolBar()
 {
-  createButton('0 2 2', '.png?v=1561926227450');
+  createButton('0 2 2', './images/aTest.png');
   createButton('-2 2 2')
 }
 
