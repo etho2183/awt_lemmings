@@ -625,12 +625,22 @@ function updateModel(lemming)
 	if (task == "stop")								lemming.setAttribute("gltf-model", "./Models/lemming_stop.glb");
 }
 
-function setUIToolBar()
+function createButton(position, source, onClick)
 {
-
+  const box = document.createElement('a-box');
+  box.setAttribute('position', position);
+  box.setAttribute('height', 2);
+  box.setAttribute('width', 2);
+  box.setAttribute('src', source);
+  box.addEventListener('onclick', onClick);
+	document.querySelector("a-scene").appendChild(box);
 }
 
-
+function setUIToolBar()
+{
+  createButton('0 2 2', '.png?v=1561926227450');
+  createButton('-2 2 2')
+}
 
 window.onload = function() 
 {
