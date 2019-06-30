@@ -625,6 +625,27 @@ function updateModel(lemming)
 	if (task == "stop")								lemming.setAttribute("gltf-model", "./Models/lemming_stop.glb");
 }
 
+function setUIToolBar()
+{
+	loadCamera();
+	var sky = document.createElement("a-sky");
+	sky.setAttribute("color", "#9999FF");
+	document.querySelector("a-scene").appendChild(sky);
+	createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
+	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
+
+	createBox(20, 1, 2, "0 0 0", "floor", "");
+	createBox(10, 2, 2, "-5 4 0", "floor", "");
+	createBox(1, 12, 2, "-10.5 5.5 0", "wall", "");
+	createBox(1, 12, 2, "10.5 5.5 0", "wall", "");
+	createBox(1, 6, 2, "5 8 0", "wall", "");
+
+	createBox(1.2, 0.1, 1.2, "-5 8 0", "", "spawner");
+	createBox(1.6, 2, 1.6, "7 1.5 0", "", "exit");
+}
+
+
+
 window.onload = function() 
 {
 	lemmingId = 0;
