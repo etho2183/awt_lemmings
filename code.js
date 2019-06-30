@@ -632,14 +632,24 @@ function createButton(position, source, onClick)
   box.setAttribute('height', 2);
   box.setAttribute('width', 2);
   box.setAttribute('src', source);
-  box.addEventListener('onclick', ();
+  box.addEventListener('onclick', () => {
+    const wasButtonSelected = box.getAttribute('data-selected');
+    
+    if (wasButtonSelected) {
+      Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('onclick', onClick));
+    } else {
+      Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('onclick', onClick));
+    }
+    
+    box.setAttribute('data-selected', !wasButtonSelected);
+  });
 	document.querySelector("a-scene").appendChild(box);
 }
 
 function setUIToolBar()
 {
-  createButton('0 2 2', './images/aTest.png');
-  createButton('-2 2 2')
+  createButton('0 2 2', './images/aTest.png', () => alert('hey'));
+  // createButton('-2 2 2')
 }
 
 window.onload = function() 
