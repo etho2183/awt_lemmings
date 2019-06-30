@@ -223,8 +223,7 @@ function spawnLemming()
 
 function stopOthers(idOrLemming)
 {
-  debugger
-  let lemming
+  let lemming;
   if (typeof(idOrLemming) === 'string') {
     	lemming = getLemming(idOrLemming);
     if (lemming == null) 
@@ -232,8 +231,9 @@ function stopOthers(idOrLemming)
       console.log("Invalid lemming ID");
       return false;
     }
+  } else {
+    lemming = getLemming(idOrLemming.currentTarget.id);
   }
-  lemming = idOrLemming;
 	lemming.removeEventListener("collide", collisionFunction);
 	lemming.setAttribute("task", "stop");
 	updateModel(lemming);
@@ -244,14 +244,19 @@ function stopOthers(idOrLemming)
 	lemming.body.collisionFilterMask = 1+2+4+8;
 }
 
-function digDown(id)
+function digDown(idOrLemming)
 {
-	var lemming = getLemming(id);
-	if (lemming == null) 
-	{
-		console.log("Invalid lemming ID");
-		return false;
-	}
+  let lemming;
+  if (typeof(idOrLemming) === 'string') {
+    lemming = getLemming(idOrLemming);
+    if (lemming == null) 
+    {
+      console.log("Invalid lemming ID");
+      return false;
+    }
+  } else {
+    lemming = getLemming(idOrLemming.currentTarget.id);
+  }
 	lemming.setAttribute("color" , "#55AA55");
 	lemming.body.velocity.set(0,0.1,0);
 	lemming.setAttribute("task", "digDown");
@@ -370,15 +375,21 @@ function giveChute(id)
 	lemming.setAttribute("hasChute", true);
 }
 
-function buildStairs(id, counter)
+function buildStairs(idOrLemming, counter)
 {
 	if (counter == null) counter = 0;
-	var lemming = getLemming(id);
-	if (lemming == null) 
-	{
-		console.log("Invalid lemming ID");
-		return false;
-	}
+  let lemming;
+  if (typeof(idOrLemming) === 'string') {
+    lemming = getLemming(idOrLemming);
+    if (lemming == null) 
+    {
+      console.log("Invalid lemming ID");
+      return false;
+    }
+  } else {
+    lemming = getLemming(idOrLemming.currentTarget.id);
+  }
+  lemming = get
 	var dir = lemming.getAttribute("direction");
 
 	if (counter >= 11)	// stair finished, resume walking
