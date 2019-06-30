@@ -223,6 +223,7 @@ function spawnLemming()
 
 function stopOthers(id)
 {
+  debugger
 	var lemming = getLemming(id);
 	if (lemming == null) 
 	{
@@ -650,7 +651,8 @@ function createButton(position, source, onClick)
 
 function setUIToolBar()
 {
-  createButton('0 2 2', './images/aTest.png', () => alert('hey'));
+  createButton('0 2 2', './images/aTest.png', stopOthers);
+  // createButton('0 2 2', './images/aTest.png', () => alert('hey'));
   // createButton('-2 2 2')
 }
 
@@ -660,9 +662,7 @@ window.onload = function()
 	objectId = 0;
 	lemmingsArrived = 0;
   setTimeout(spawnLemming, 1000);
-  setTimeout(spawnLemming, 1000);
-  setTimeout(spawnLemming, 1000);
-  setTimeout(spawnLemming, 1000);
+
 
 	setInterval(checkFalling, 20); // 50 times per second. Could also be checked each time a frame is produced
 	//lemmings will be spawned by hand later
