@@ -537,8 +537,8 @@ function setLevel1()
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
-	createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
+	createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 10);
 
 	createBox(20, 1, 2, "0 0 0", "floor", "");
 	createBox(10, 2, 2, "-5 4 0", "floor", "");
@@ -667,10 +667,10 @@ function createButton(position, source, onClick)
 
 function setUIToolBar()
 {
-  createButton('-4 1 0', './images/aTest.png', spawnLemming);
-  createButton('-3 1 2', './images/aTest.png', stopOthers);
-  createButton('-2 1 2', './images/aTest.png', digDown);
-  createButton('-1 1 2', './images/aTest.png', buildStairs);
+  createButton('-4 -1.3 0', './images/aTest.png', spawnLemming);
+  createButton('-3 -1.3 0', './images/aTest.png', stopOthers);
+  createButton('-2 -1.3 0', './images/aTest.png', digDown);
+  createButton('-1 -1.3 0', './images/aTest.png', buildStairs);
 }
 
 window.onload = function() 
