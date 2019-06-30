@@ -651,7 +651,7 @@ function createButton(position, source, onClick)
   box.setAttribute('height', 1);
   box.setAttribute('width', 1);
   box.setAttribute('src', source);
-  box.addEventListener('mousedown', () => {
+  box.addEventListener('click', () => {
     const wasButtonSelected = box.getAttribute('data-selected');
     debugger
     if (wasButtonSelected) {
