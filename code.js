@@ -651,7 +651,7 @@ function createButton(position, source, onClick)
   box.setAttribute('height', 1);
   box.setAttribute('width', 1);
   box.setAttribute('src', source);
-  box.addEventListener('click', () => {
+  box.addEventListener('mousedown', () => {
     const wasButtonSelected = box.getAttribute('data-selected');
     debugger
     if (wasButtonSelected) {
@@ -667,10 +667,17 @@ function createButton(position, source, onClick)
 
 function setUIToolBar()
 {
-  createButton('-4 -1.3 0', './images/walk', spawnLemming);
-  createButton('-3 -1.3 0', './images/stop', stopOthers);
-  createButton('-2 -1.3 0', './images/dig', digDown);
-  createButton('-1 -1.3 0', './images/build', buildStairs);
+  const box = document.createElement('a-box');
+  box.setAttribute('position', '-4 -1.3 0');
+  box.setAttribute('height', 1);
+  box.setAttribute('width', 1);
+  box.setAttribute('src', './walk.png');
+  box.addEventListener('click', () => {spawnLemming();
+  });
+	document.querySelector("a-scene").appendChild(box);
+  createButton('-3 -1.3 0', './stop.png', stopOthers);
+  createButton('-2 -1.3 0', './dig.png', digDown);
+  createButton('-1 -1.3 0', './build.png', buildStairs);
 }
 
 window.onload = function() 
