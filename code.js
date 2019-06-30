@@ -632,9 +632,9 @@ function createButton(position, source, onClick)
   box.setAttribute('height', 2);
   box.setAttribute('width', 2);
   box.setAttribute('src', source);
-  box.addEventListener('onclick', () => {
+  box.addEventListener('click', () => {
     const wasButtonSelected = box.getAttribute('data-selected');
-    
+    debugger
     if (wasButtonSelected) {
       Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('onclick', onClick));
     } else {
@@ -657,6 +657,7 @@ window.onload = function()
 	lemmingId = 0;
 	objectId = 0;
 	lemmingsArrived = 0;
+  setTimeout(spawnLemming, 1000);
 
 	setInterval(checkFalling, 20); // 50 times per second. Could also be checked each time a frame is produced
 	//lemmings will be spawned by hand later
