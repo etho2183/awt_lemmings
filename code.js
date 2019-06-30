@@ -667,10 +667,10 @@ function createButton(position, source, onClick)
 
 function setUIToolBar()
 {
-  createButton('-4 -1.3 0', './images/aTest.png', spawnLemming);
-  createButton('-3 -1.3 0', './images/aTest.png', stopOthers);
-  createButton('-2 -1.3 0', './images/aTest.png', digDown);
-  createButton('-1 -1.3 0', './images/aTest.png', buildStairs);
+  createButton('-4 -1.3 0', './images/walk', spawnLemming);
+  createButton('-3 -1.3 0', './images/stop', stopOthers);
+  createButton('-2 -1.3 0', './images/dig', digDown);
+  createButton('-1 -1.3 0', './images/build', buildStairs);
 }
 
 window.onload = function() 
