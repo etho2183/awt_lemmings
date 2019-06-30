@@ -377,19 +377,20 @@ function giveChute(id)
 
 function buildStairs(idOrLemming, counter)
 {
+  debugger
 	if (counter == null) counter = 0;
-  let lemming;
+  let id;
   if (typeof(idOrLemming) === 'string') {
-    lemming = getLemming(idOrLemming);
+    id = idOrLemming;
     if (lemming == null) 
     {
       console.log("Invalid lemming ID");
       return false;
     }
   } else {
-    lemming = getLemming(idOrLemming.currentTarget.id);
+    id = idOrLemming.currentTarget.id;
   }
-  lemming = get
+  var lemming = getLemming(id);
 	var dir = lemming.getAttribute("direction");
 
 	if (counter >= 11)	// stair finished, resume walking
@@ -647,8 +648,8 @@ function createButton(position, source, onClick)
 {
   const box = document.createElement('a-box');
   box.setAttribute('position', position);
-  box.setAttribute('height', 2);
-  box.setAttribute('width', 2);
+  box.setAttribute('height', 1);
+  box.setAttribute('width', 1);
   box.setAttribute('src', source);
   box.addEventListener('click', () => {
     const wasButtonSelected = box.getAttribute('data-selected');
@@ -666,9 +667,10 @@ function createButton(position, source, onClick)
 
 function setUIToolBar()
 {
-  createButton('0 2 2', './images/aTest.png', stopOthers);
-  // createButton('0 2 2', './images/aTest.png', () => alert('hey'));
-  // createButton('-2 2 2')
+  createButton('-4 1 0', './images/aTest.png', spawnLemming);
+  createButton('-3 1 2', './images/aTest.png', stopOthers);
+  createButton('-2 1 2', './images/aTest.png', digDown);
+  createButton('-1 1 2', './images/aTest.png', buildStairs);
 }
 
 window.onload = function() 
@@ -676,12 +678,11 @@ window.onload = function()
 	lemmingId = 0;
 	objectId = 0;
 	lemmingsArrived = 0;
-  setTimeout(spawnLemming, 1000);
-
 
 	setInterval(checkFalling, 20); // 50 times per second. Could also be checked each time a frame is produced
 	//lemmings will be spawned by hand later
-
+  
+  //set the toolbar for user interface, which includes the buttons to spawn and assign roles
   setUIToolBar();
 	//DEMO
 	setLevel1();
