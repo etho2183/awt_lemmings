@@ -654,7 +654,7 @@ function createButton(position, source, onClick)
   box.addEventListener('click', () => {
     const wasButtonSelected = box.getAttribute('data-selected');
     debugger
-    if (wasButtonSelected) {
+    if (wasButtonSelected === 'true') {
       Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('click', onClick));
     } else {
       Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('click', onClick));
