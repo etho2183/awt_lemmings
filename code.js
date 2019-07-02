@@ -459,6 +459,9 @@ function updateVelocities(){
 // position is a string ("x y z"), type and id are strings
 function createBox(width, height, depth, position, type, id)
 {
+	var marker = document.createElement("a-marker-camera");
+	marker.setAttribute("preset","hiro");
+
 	var box = document.createElement("a-box");
 	console.log("creating box with " + width + " * " + height + " * " + depth);
 	box.setAttribute("static-body", "");
