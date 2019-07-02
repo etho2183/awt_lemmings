@@ -487,8 +487,9 @@ function createBox(width, height, depth, position, type, id)
 		this.body.collisionFilterMask = 1+2+4+8;
 	})
 
-	document.querySelector("a-scene").appendChild(box);
-
+	// document.querySelector("a-scene").appendChild(box);
+	marker.appendChild(box);
+	document.querySelector("a-scene").appendChild(marker);
 	return box;
 }
 
