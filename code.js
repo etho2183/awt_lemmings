@@ -490,7 +490,7 @@ function createBox(width, height, depth, position, type, id)
 	// document.querySelector("a-scene").appendChild(box);
 	marker.appendChild(box);
 	document.querySelector("a-scene").appendChild(marker);
-	return box;
+	// return box;
 }
 
 // currently bugged. Don't use
@@ -524,7 +524,7 @@ function setLevel1()
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
-	createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
+	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
 	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
 
 	createBox(20, 1, 2, "0 0 0", "floor", "");
