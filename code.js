@@ -682,10 +682,10 @@ function createSpawnButton()
 function setUIToolBar()
 {	
   createSpawnButton();
-  createRoleButton('-3 -1.3 0', './stop.png', './stopOff.png',stopOthers);
-  // // // createRoleButton('-2 -1.3 0', './dig.png', digDown);
-  // // createRoleButton('-1 -1.3 0', './build.png', buildStairs);
-  // createRoleButton('0 -1.3 0', './paarachute.png', giveChute);
+  createRoleButton('-3 -1.3 0', './stop.png', './stopOff.png', stopOthers);
+  createRoleButton('-2 -1.3 0', './dig.png', './digOff.png', digDown);
+  createRoleButton('-1 -1.3 0', './build.png', './stairsOff.png', buildStairs);
+  createRoleButton('0 -1.3 0', './paarachute.png', './parachuteOff.png', giveChute);
 }
 
 window.onload = function() 
