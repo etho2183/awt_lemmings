@@ -644,20 +644,22 @@ function updateModel(lemming)
 	if (task == "stop")								lemming.setAttribute("gltf-model", "./Models/lemming_stop.glb");
 }
 
-function createRoleButton(position, source, onClick)
+function createRoleButton(position, sourceOn, sourceOff, onClick)
 {
   const box = document.createElement('a-box');
   box.setAttribute('position', position);
   box.setAttribute('height', 1);
   box.setAttribute('width', 1);
-  box.setAttribute('src', source);
+  box.setAttribute('src', sourceOff);
   box.addEventListener('click', () => {
     const wasButtonSelected = box.getAttribute('data-selected');
     debugger
     if (wasButtonSelected === 'true') {
       Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('click', onClick));
+      box.setAttribute('src', sourceOff);
     } else {
       Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('click', onClick));
+      box.setAttribute('src', sourceOn);
     }
     
     box.setAttribute('data-selected', !wasButtonSelected);
@@ -680,10 +682,10 @@ function createSpawnButton()
 function setUIToolBar()
 {	
   createSpawnButton();
-  createRoleButton('-3 -1.3 0', './stop.png', stopOthers);
-  createRoleButton('-2 -1.3 0', './dig.png', digDown);
-  createRoleButton('-1 -1.3 0', './build.png', buildStairs);
-  createRoleButton('0 -1.3 0', './paarachute.png', giveChute);
+  createRoleButton('-3 -1.3 0', './stop.png', './stopOff.png',stopOthers);
+  // // // createRoleButton('-2 -1.3 0', './dig.png', digDown);
+  // // createRoleButton('-1 -1.3 0', './build.png', buildStairs);
+  // createRoleButton('0 -1.3 0', './paarachute.png', giveChute);
 }
 
 window.onload = function() 
