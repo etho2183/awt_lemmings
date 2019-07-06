@@ -657,12 +657,13 @@ function createRoleButton(position, sourceOn, sourceOff, onClick)
     if (wasButtonSelected === 'true') {
       Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('click', onClick));
       box.setAttribute('src', sourceOff);
+      box.setAttribute('data-selected', false);
     } else {
       Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('click', onClick));
       box.setAttribute('src', sourceOn);
+      box.setAttribute('data-selected', true);
     }
     
-    box.setAttribute('data-selected', !wasButtonSelected);
   });
 	document.querySelector("a-scene").appendChild(box);
 }
