@@ -644,7 +644,7 @@ function updateModel(lemming)
 	if (task == "stop")								lemming.setAttribute("gltf-model", "./Models/lemming_stop.glb");
 }
 
-function createButton(position, source, onClick)
+function createRoleButton(position, source, onClick)
 {
   const box = document.createElement('a-box');
   box.setAttribute('position', position);
@@ -665,7 +665,7 @@ function createButton(position, source, onClick)
 	document.querySelector("a-scene").appendChild(box);
 }
 
-function setUIToolBar()
+function createSpawnButton()
 {
   const box = document.createElement('a-box');
   box.setAttribute('position', '-4 -1.3 0');
@@ -674,10 +674,16 @@ function setUIToolBar()
   box.setAttribute('src', './walk.png');
   box.addEventListener('click', () => {spawnLemming();
   });
-	document.querySelector("a-scene").appendChild(box);
-  createButton('-3 -1.3 0', './stop.png', stopOthers);
-  createButton('-2 -1.3 0', './dig.png', digDown);
-  createButton('-1 -1.3 0', './build.png', buildStairs);
+  document.querySelector("a-scene").appendChild(box);
+}
+
+function setUIToolBar()
+{	
+  createSpawnButton();
+  createRoleButton('-3 -1.3 0', './stop.png', stopOthers);
+  createRoleButton('-2 -1.3 0', './dig.png', digDown);
+  createRoleButton('-1 -1.3 0', './build.png', buildStairs);
+  createRoleButton('0 -1.3 0', './paarachute.png', giveChute);
 }
 
 window.onload = function() 
