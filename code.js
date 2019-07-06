@@ -460,7 +460,7 @@ function updateVelocities(){
 function createBox(width, height, depth, position, type, id)
 {
 	var marker = document.createElement("a-marker-camera");
-	marker.setAttribute("preset","hiro");
+	marker.setAttribute("preset","barcode");
 
 	var box = document.createElement("a-box");
 	console.log("creating box with " + width + " * " + height + " * " + depth);
