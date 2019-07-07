@@ -674,7 +674,7 @@ function createSpawnButton()
   box.setAttribute('position', '-4 -1.3 0');
   box.setAttribute('height', 1);
   box.setAttribute('width', 1);
-  box.setAttribute('src', './walk.png');
+  box.setAttribute('src', './images/spawn.png');
   box.addEventListener('click', () => {spawnLemming();
   });
   document.querySelector("a-scene").appendChild(box);
@@ -683,10 +683,10 @@ function createSpawnButton()
 function setUIToolBar()
 {	
   createSpawnButton();
-  createRoleButton('-3 -1.3 0', './stop.png', './stopOff.png', stopOthers);
-  createRoleButton('-2 -1.3 0', './dig.png', './digOff.png', digDown);
-  createRoleButton('-1 -1.3 0', './build.png', './stairsOff.png', buildStairs);
-  createRoleButton('0 -1.3 0', './paarachute.png', './parachuteOff.png', giveChute);
+  createRoleButton('-3 -1.3 0', './images/stop.png', './images/stopOff.png', stopOthers);
+  createRoleButton('-2 -1.3 0', './images/dig.png', './images/digOff.png', digDown);
+  createRoleButton('-1 -1.3 0', './images/build.png', './images/buildOff.png', buildStairs);
+  createRoleButton('0 -1.3 0', './images/parachute.png', './images/parachuteOff.png', giveChute);
 }
 
 window.onload = function() 
