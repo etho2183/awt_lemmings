@@ -26,3 +26,15 @@ h1 {
   background-color: orange;
   color: white;
 }
+
+#vrButton {
+  position: absolute;
+  left: 650px;
+  top: 480px;
+}
+
+#arButton {
+  position: absolute;
+  left: 650px;
+  top: 560px;
+}

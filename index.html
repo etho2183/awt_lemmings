@@ -6,13 +6,11 @@
     <!-- import the webpage's javascript file -->
     <script src="/script.js" defer></script>
   </head>  
-<body background="lemmingsStart.jpg">
-  <button id="vrButton" class="button" type="button" style="position: absolute;
-    left: 650px;
-    top: 480px;">Virtual Reality</button>
-  <button id="arButton" class="button" type="button" style="
-    position: absolute;
-    left: 650px;
-    top: 560px;">Argumented Reality</button>
+  <body background="lemmingsStart.jpg">
+    <div id="mode-buttons-container">
+      <button id="vrButton" class="button" type="button" onclick="selectMode('vr')">Virtual Reality</button>
+      <button id="arButton" class="button" type="button" onclick="select">Augmented Reality</button>
+    </div>
+    <div id="level-buttons-container" />
   </body>
 </html>
