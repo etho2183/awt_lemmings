@@ -653,7 +653,6 @@ function createRoleButton(position, sourceOn, sourceOff, onClick)
   box.setAttribute('src', sourceOff);
   box.addEventListener('click', () => {
     const wasButtonSelected = box.getAttribute('data-selected');
-    debugger
     if (wasButtonSelected === 'true') {
       Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('click', onClick));
       box.setAttribute('src', sourceOff);
