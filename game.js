@@ -469,6 +469,7 @@ function buildStairs(id, counter)
 	
 
 	lemming.setAttribute("task", "stairs");
+	updateModel(lemming);
 	lemming.body.velocity.set(0,0,0);
 	//build one stair after another
 	for (var i = 0; i < 1; i++)
@@ -500,7 +501,7 @@ function setStair(pos, direction)
 		stair.setAttribute("width", lemmingWidth);
 		stair.setAttribute("height", 0.1);
 		stair.setAttribute("depth", lemmingWidth+0.2);
-		stair.setAttribute("color", "#663300");
+		stair.setAttribute("color", "#5E0011");
 		stair.setAttribute("class", "stair");
 		stair.setAttribute("id", "obj"+objectId);
 		objectId++;
@@ -644,7 +645,7 @@ function setAlphaLevel()
 function setLevel1()
 {
 	loadCamera();
-  minLemmingsToWin = 20;
+  	minLemmingsToWin = 5;
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
@@ -677,7 +678,7 @@ function setLevel1()
 function setLevel2()
 {
 	loadCamera();
-  minLemmingsToWin = 10;
+  minLemmingsToWin = 5;
   maxLemmings = 10
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#9999FF");
@@ -699,7 +700,7 @@ function setLevel2()
 function setLevel3()
 {
 	loadCamera();
-  minLemmingsToWin = 16;
+  minLemmingsToWin = 5;
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#336699");
 	document.querySelector("a-scene").appendChild(sky);
@@ -801,15 +802,13 @@ function updateModel(lemming)
 	var model = "";	
 	var hasChute = lemming.getAttribute("hasChute");
 	if (hasChute == "") hasChute = false;
-	if (task == "walking")
-	{
-		model = "walk_animated";
-	} 							
+	if (task == "walking")							model = "walk_animated";			
 	if ((task == "falling") && (hasChute)) 			model = "chute";
 	if ((task == "falling") && (!hasChute)) 		model = "fall";
 	if (task == "digDown")							model = "digDown";
 	if (task == "stop")								model = "stop";
 	if (task == "dead")								model = "tombstone";
+	if (task == "stairs")							model = "stair";
 
 	if (model != "")
 	{
