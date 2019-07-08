@@ -804,11 +804,13 @@ function createRoleButton(position, sourceOn, sourceOff, onClick)
   box.switchOff = () => {
     box.setAttribute('src', sourceOff);
     box.setAttribute('data-selected', false);
+    Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('click', onClick));
   };
   
   box.switchOn = () => {
     box.setAttribute('src', sourceOn);
     box.setAttribute('data-selected', true);
+    Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('click', onClick));
   };
   
   box.addEventListener('click', () => {
@@ -816,10 +818,8 @@ function createRoleButton(position, sourceOn, sourceOff, onClick)
     switchSelectedButtonOff();
     
     if (wasButtonSelected) {
-      Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('click', onClick));
       box.switchOff();
     } else {
-      Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('click', onClick));
       box.switchOn();
     }
   });
