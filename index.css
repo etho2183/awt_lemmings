@@ -4,7 +4,7 @@ body {
   font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
   margin: 0;
   height: 100vh;
-  background-image: url('https://cdn.glitch.com/bdb51214-9cac-4eb4-8bef-fb5c48f7df1f%2FlemmingsBackground.jpg?v=1562584285339');
+  background-image: url('./startBackground.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
