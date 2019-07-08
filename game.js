@@ -800,6 +800,19 @@ function setUIToolBar()
   createRoleButton('0 -1.3 0', './images/parachute.png', './images/parachuteOff.png', giveChute);
 }
 
+function setARToolBar() {
+  const toll
+}
+
+function createARTollBarButton(text, onClick) {
+  const button = document.createElement('button');
+  button.innerText = text;
+  button.classList.add('ar-button');
+  button.addEventListener('click', onClick);
+  
+  return button;
+}
+
 
 
 function startGame(selectedMode, level) 
