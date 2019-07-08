@@ -34,18 +34,14 @@ function collisionFunction(e)
 	if(e.detail.body.el.id == "exit")
 	{
 		lemmingsArrived++;
-    if (lemmingsArrived == minLemmingsToWin)
-		{
-			console.log("You won! Please select another level");
-		}
 		console.log(this.id + ": reached destination. Removing. Total arrived: " + lemmingsArrived);
-		removeLemming(this.id);
+		this.parentNode.removeChild(this);	// throws an error but seems to work fine
 		return;
 	}
 	if(e.detail.body.el.id == "theVoid")
 	{
 		console.log(this.id + ": fell out of the world. Removing.");
-		removeLemming(this.id);
+		this.parentNode.removeChild(this);	// throws an error but seems to work fine
 		return;
 	}
 
@@ -64,14 +60,7 @@ function collisionFunction(e)
 	// there is no continuous collision checking, only periodically. Fast objects clip into other objects, until a collision is registered
 	// faster objects clip further into other objects, resulting in a higher delta (at vertical speeds). Avoid high acceleration! Mostly caused by falling.
 
-  // if lemming is falling, either kill him or resume walking
-  
 	if ((delta < 0.09) && (delta > -0.09))	// collision with floor
-  {
-		// nothing so far
-	}
-
-	if (this.getAttribute("task") == "falling")
 	{
 		var hasChute = (this.getAttribute("hasChute") == "true");
 		if (!hasChute && (fallHeight > 4.5))
@@ -80,12 +69,21 @@ function collisionFunction(e)
 			killLemming(this.id);
 			return;
 		}
+		else 	this.removeAttribute("fallingStart");	
+	}
 
-		this.removeAttribute("fallingStart");	
+	console.log(this.id + ": task: " + this.getAttribute("task") + " == falling: " + (this.getAttribute("task") == "falling"));
+	if (this.getAttribute("task") == "falling")
+	{
+		console.log(this.id + ": should be walking");
+		//this.removeAttribute("task");
 		this.setAttribute("task", "walking");
-		console.log(this.id + ": is walking again");
 		updateModel(this);
+		//setTimeout(function(e) {e.setAttribute("task", "walking");}, 100, this);
+		//this.removeAttribute("color");
+		setTimeout(function(e) {e.setAttribute("color", "#33cc33");}, 100, this);
 		setTimeout(setVelocity, 100, this, "maintain");
+		//this.removeAttribute("lastCollision");
 		return;
 	}
 
@@ -179,14 +177,6 @@ function getLemming(id)
 
 function spawnLemming()
 {
-  
-  if (lemmingId == maxLemmings)
-	{
-		console.log("The maximum amount of lemmings (" + maxLemmings + ") is already spawned!");
-		console.log("If you did non win yet, retry the level and try to let more lemmings survive");
-		return false;
-	}
-  
 	var spawner = document.querySelector("#spawner")
 	if (spawner == null)
 	{
@@ -198,8 +188,7 @@ function spawnLemming()
 	var lemming = document.createElement("a-box");
 	lemming.className = "lemming";
 	lemming.setAttribute("position", spawnPos.x + " " + (spawnPos.y-0.7) + " " + spawnPos.z);
-	lemming.setAttribute("fallingStart", spawnPos.y);
-  lemming.setAttribute("dynamic-body", "linearDamping: 0"); // linear damping can also be added inside "body-loaded" event listener
+	lemming.setAttribute("dynamic-body", "linearDamping: 0"); // linear damping can also be added inside "body-loaded" event listener
 	//lemming.setAttribute("mass", "1");
 	lemming.setAttribute("width", lemmingWidth);
 	lemming.setAttribute("height", lemmingHeight);
@@ -239,16 +228,6 @@ function spawnLemming()
 	latestLemming = lemming;
 	updateModel(lemming);
 	lemmingId++;
-  if (lemmingId == maxLemmings)
-	{
-		spawner.setAttribute("gltf-model", "./Models/spawner_closed.glb");
-	}
-}
-
-function winLevel()
-{
-	clearLevel();
-
 }
 
 function stopOthers(idOrLemming)
