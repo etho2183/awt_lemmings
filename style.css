@@ -40,3 +40,8 @@ h1 {
   left: 650px;
   top: 560px;
 }
+
+#level-buttons-container button {
+  display: block;
+  margin-bottom: 8px;
+}
