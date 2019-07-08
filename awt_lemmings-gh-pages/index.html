@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://aframe.io/releases/0.9.1/aframe.min.js"></script>
+    <script src="./code.js" defer></script>
+	<script src="https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.js"></script>
+	<script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js"></script>
+  </head>  
+  <body>
+    <a-scene physics="debug: false; friction: 0; restitution: 0;">
+		<a-assets>
+			<a-asset-item id="lemming_walk_r" src="./Models/lemming_walk_r.glb"></a-asset-item>
+			<img id="texture_floor" src="./Textures/floor.jpg">
+			<img id="texture_wall" src="./Textures/wall.jpg">
+		</a-assets>
+		<!-- ADD CAMERA BY JAVASCRIPT loadCamera() function -->
+		<!-- ADD EMELENTS BY JAVASCRIPT createBox(...) function -->
+    </a-scene>
+  </body>
+</html>

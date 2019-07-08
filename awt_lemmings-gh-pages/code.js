@@ -8,7 +8,6 @@ var velocity = 2;
 var lemmingsArrived;
 var maxLemmings = 20;
 var minLemmingsToWin;
-var mode;
 
 function collisionFunction(e)
 {	
@@ -34,7 +33,7 @@ function collisionFunction(e)
 	if(e.detail.body.el.id == "exit")
 	{
 		lemmingsArrived++;
-    if (lemmingsArrived == minLemmingsToWin)
+		if (lemmingsArrived == minLemmingsToWin)
 		{
 			console.log("You won! Please select another level");
 		}
@@ -80,7 +79,7 @@ function collisionFunction(e)
 			killLemming(this.id);
 			return;
 		}
-
+		
 		this.removeAttribute("fallingStart");	
 		this.setAttribute("task", "walking");
 		console.log(this.id + ": is walking again");
@@ -179,13 +178,13 @@ function getLemming(id)
 
 function spawnLemming()
 {
-  if (lemmingId == maxLemmings)
+	if (lemmingId == maxLemmings)
 	{
 		console.log("The maximum amount of lemmings (" + maxLemmings + ") is already spawned!");
 		console.log("If you did non win yet, retry the level and try to let more lemmings survive");
 		return false;
 	}
-  
+
 	var spawner = document.querySelector("#spawner")
 	if (spawner == null)
 	{
@@ -198,7 +197,7 @@ function spawnLemming()
 	lemming.className = "lemming";
 	lemming.setAttribute("position", spawnPos.x + " " + (spawnPos.y-0.7) + " " + spawnPos.z);
 	lemming.setAttribute("fallingStart", spawnPos.y);
-  lemming.setAttribute("dynamic-body", "linearDamping: 0"); // linear damping can also be added inside "body-loaded" event listener
+	lemming.setAttribute("dynamic-body", "linearDamping: 0"); // linear damping can also be added inside "body-loaded" event listener
 	//lemming.setAttribute("mass", "1");
 	lemming.setAttribute("width", lemmingWidth);
 	lemming.setAttribute("height", lemmingHeight);
@@ -238,7 +237,7 @@ function spawnLemming()
 	latestLemming = lemming;
 	updateModel(lemming);
 	lemmingId++;
-  if (lemmingId == maxLemmings)
+	if (lemmingId == maxLemmings)
 	{
 		spawner.setAttribute("gltf-model", "./Models/spawner_closed.glb");
 	}
@@ -246,23 +245,18 @@ function spawnLemming()
 
 function winLevel()
 {
-	// clearLevel();
-  console.log('winLevel() called')
+	clearLevel();
+
 }
 
-function stopOthers(idOrLemming)
+function stopOthers(id)
 {
-	let lemming;
-  if (typeof(idOrLemming) === 'string') {
-    	lemming = getLemming(idOrLemming);
-    if (lemming == null) 
-    {
-      console.log("Invalid lemming ID");
-      return false;
-    }
-  } else {
-    lemming = getLemming(idOrLemming.currentTarget.id);
-  }
+	var lemming = getLemming(id);
+	if (lemming == null) 
+	{
+		console.log("Invalid lemming ID");
+		return false;
+	}
 	lemming.removeEventListener("collide", collisionFunction);
 	lemming.setAttribute("task", "stop");
 	updateModel(lemming);
@@ -273,19 +267,14 @@ function stopOthers(idOrLemming)
 	lemming.body.collisionFilterMask = 1+2+4+8;
 }
 
-function digDown(idOrLemming)
+function digDown(id)
 {
-	let lemming;
-  if (typeof(idOrLemming) === 'string') {
-    lemming = getLemming(idOrLemming);
-    if (lemming == null) 
-    {
-      console.log("Invalid lemming ID");
-      return false;
-    }
-  } else {
-    lemming = getLemming(idOrLemming.currentTarget.id);
-  }
+	var lemming = getLemming(id);
+	if (lemming == null) 
+	{
+		console.log("Invalid lemming ID");
+		return false;
+	}
 	lemming.setAttribute("color" , "#55AA55");
 	lemming.body.velocity.set(0,0.1,0);
 	lemming.setAttribute("task", "digDown");
@@ -321,7 +310,7 @@ function digDownPartTwo(lemming)
 	var rightX = lemmingX + lemmingWidth + (rightWidth / 2);
 	
 	var scene = document.querySelector("a-scene");
-  floor.removeAttribute("src");
+	floor.removeAttribute("src");
 	scene.removeChild(floor);
 
 	// the lemming is not digging at the left end of the floor
@@ -363,7 +352,7 @@ function shrink(object, vertical)
 		{
 			var lemming = document.querySelector("#"+object.getAttribute("lemming"));
 			var scene = document.querySelector("a-scene");
-      object.removeAttribute("src");
+			object.removeAttribute("src");
 			scene.removeChild(object);
 			clearInterval(object.getAttribute("shrinker"));
 			lemming.setAttribute("task", "walking");
@@ -421,38 +410,26 @@ function removeLemming(id)
 	document.querySelector("a-scene").removeChild(lemming); 
 }
 
-function giveChute(idOrLemming)
+function giveChute(id)
 {
-  let lemming;
-  if (typeof(idOrLemming) === 'string') {
-    	lemming = getLemming(idOrLemming);
-    if (lemming == null) 
-    {
-      console.log("Invalid lemming ID");
-      return false;
-    }
-  } else {
-    lemming = getLemming(idOrLemming.currentTarget.id);
-  }
-  
+	var lemming = getLemming(id);
+	if (lemming == null) 
+	{
+		console.log("Invalid lemming ID");
+		return false;
+	}
 	lemming.setAttribute("hasChute", true);
 }
 
-function buildStairs(idOrLemming, counter)
+function buildStairs(id, counter)
 {
 	if (counter == null) counter = 0;
-  let id;
-  if (typeof(idOrLemming) === 'string') {
-    id = idOrLemming;
-    if (lemming == null) 
-    {
-      console.log("Invalid lemming ID");
-      return false;
-    }
-  } else {
-    id = idOrLemming.currentTarget.id;
-  }
-  var lemming = getLemming(id);
+	var lemming = getLemming(id);
+	if (lemming == null) 
+	{
+		console.log("Invalid lemming ID");
+		return false;
+	}
 	var dir = lemming.getAttribute("direction");
 
 	if (counter >= 11)	// stair finished, resume walking
@@ -538,11 +515,6 @@ function updateVelocities(){
 // position is a string ("x y z"), type and id are strings
 function createBox(width, height, depth, position, type, id)
 {
-  if(mode === 'ar') {
-    var marker = document.createElement("a-marker-camera");
-	  marker.setAttribute("preset","barcode");
-  }
-  
 	var box = document.createElement("a-box");
 	console.log("creating box with " + width + " * " + height + " * " + depth);
 	if ((id == "spawner") || (id == "exit"))
@@ -588,38 +560,31 @@ function createBox(width, height, depth, position, type, id)
 		this.body.collisionFilterMask = 1+2+4+8;
 	})
 
-  if (mode === 'ar') {
-    marker.appendChild(box);
-	  document.querySelector("a-scene").appendChild(marker);
-    return;
-  }
-    
 	document.querySelector("a-scene").appendChild(box);
 
 	return box;
 }
 
-// function clearLevel()
-// {
-// 	lemmingId = 0;
-// 	objectId = 0;
-// 	lemmingsArrived = 0;
-// 	var boxes = document.querySelectorAll("a-box");
-// 	var scene = document.querySelector("a-scene");
-// 	for (var i = 0; i < boxes.length; i++)
-// 	{
-// 		console.log("removing: class=" + boxes[i].className + ", id=" + boxes[i].id);
-// 		boxes[i].removeAttribute("gltf-model");
-// 		boxes[i].removeAttribute("src");
-// 		scene.removeChild(boxes[i]);
-// 	}
-// 	var camera = document.querySelector("#cameraWrapper");
-// 	if (camera != null) scene.removeChild(camera);
-// 	//createBox(100, 0.1, 100, "0 0 0", "", "theVoid");
-// }
+function clearLevel()
+{
+	lemmingId = 0;
+	objectId = 0;
+	lemmingsArrived = 0;
+	var boxes = document.querySelectorAll("a-box");
+	var scene = document.querySelector("a-scene");
+	for (var i = 0; i < boxes.length; i++)
+	{
+		console.log("removing: class=" + boxes[i].className + ", id=" + boxes[i].id);
+		boxes[i].removeAttribute("gltf-model");
+		boxes[i].removeAttribute("src");
+		scene.removeChild(boxes[i]);
+	}
+	var camera = document.querySelector("#cameraWrapper");
+	if (camera != null) scene.removeChild(camera);
+	//createBox(100, 0.1, 100, "0 0 0", "", "theVoid");
+}
 
 // early testing Level, does not work anymore
-
 function setAlphaLevel()
 {
 	loadCamera();
@@ -630,8 +595,7 @@ function setAlphaLevel()
 	createBox(0.1, 0.1, 4, "4 4 -4", "wall", "");
 	createBox(0.1, 4, 4, "-4 4 -4", "wall", "");
 
-	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-  createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+	createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
 
 	// sizes do not matter
 	createBox(1, 1, 1, "0.5 5 -4", "", "spawner");
@@ -640,13 +604,13 @@ function setAlphaLevel()
 
 function setLevel1()
 {
+	clearLevel();
 	loadCamera();
-  minLemmingsToWin = 20;
+	minLemmingsToWin = 20;
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
-	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-	createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+	createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
 	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
 
 	createBox(20, 1, 2, "0 0 0", "floor", "");
@@ -663,12 +627,11 @@ function setLevel1()
 function setLevel2()
 {
 	loadCamera();
-  minLemmingsToWin(20);
+	minLemmingsToWin(20);
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
-	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-  createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+	createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
 	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
 
 	createBox(25, 1, 2, "0 0 0", "wall", "");
@@ -684,7 +647,7 @@ function setLevel2()
 function setLevel3()
 {
 	loadCamera();
-  minLemmingsToWin = 16;
+	minLemmingsToWin = 16;
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#336699");
 	document.querySelector("a-scene").appendChild(sky);
@@ -698,8 +661,7 @@ function setLevel3()
 	createBox(6, 0.1, 2, "-8 6 0", "floor", "");
 	createBox(10, 0.1, 2, "-3 7.5 0", "floor", "");
 	createBox(14, 0.1, 2, "4 9 0", "floor", "");
-	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-  createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+	createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
 
 	// sizes do not matter
 	createBox(1, 1, 1, "-1 11 0", "", "spawner");
@@ -730,8 +692,6 @@ function loadCamera()
 	var wrapper = document.createElement("a-entity");
 	wrapper.setAttribute("id", "cameraWrapper");
 	var camera = document.createElement("a-camera");
-  var cursor = document.createElement("a-cursor");
-  camera.appendChild(cursor);
 	wrapper.appendChild(camera);
 	document.querySelector("a-scene").appendChild(wrapper);
 }
@@ -797,126 +757,17 @@ function updateModel(lemming)
 		lemming.setAttribute("gltf-model", "./Models/lemming_" + model + direction + ".glb");
 }
 
-function createRoleButton(position, sourceOn, sourceOff, onClick)
-{
-  const box = document.createElement('a-box');
-  box.setAttribute('position', position);
-  box.setAttribute('height', 1);
-  box.setAttribute('width', 1);
-  box.setAttribute('src', sourceOff);
-  box.addEventListener('click', () => {
-    const wasButtonSelected = box.getAttribute('data-selected');
-    if (wasButtonSelected === 'true') {
-      Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('click', onClick));
-      box.setAttribute('src', sourceOff);
-      box.setAttribute('data-selected', false);
-    } else {
-      Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('click', onClick));
-      box.setAttribute('src', sourceOn);
-      box.setAttribute('data-selected', true);
-    }
-
-  });
-	document.querySelector("a-scene").appendChild(box);
-}
-
-function createSpawnButton()
-{
-  const box = document.createElement('a-box');
-  box.setAttribute('position', '-4 -1.3 0');
-  box.setAttribute('height', 1);
-  box.setAttribute('width', 1);
-  box.setAttribute('src', './images/spawn.png');
-  box.addEventListener('click', () => {spawnLemming();
-  });
-  document.querySelector("a-scene").appendChild(box);
-}
-
-function setUIToolBar()
-{	
-  createSpawnButton();
-  createRoleButton('-3 -1.3 0', './images/stop.png', './images/stopOff.png', stopOthers);
-  createRoleButton('-2 -1.3 0', './images/dig.png', './images/digOff.png', digDown);
-  createRoleButton('-1 -1.3 0', './images/build.png', './images/buildOff.png', buildStairs);
-  createRoleButton('0 -1.3 0', './images/parachute.png', './images/parachuteOff.png', giveChute);
-}
-
-function setARToolBar() {
-  const toolbar = document.createElement('div');
-  toolbar.id = 'ar-toolbar';
-  
-  toolbar.appendChild(createARToolBarButton('Spawn', spawnLemming));
-  
-  document.body.appendChild(toolbar);
-}
-
-function createARToolBarButton(text, onClick) {
-  const button = document.createElement('button');
-  button.innerText = text;
-  button.classList.add('ar-button');
-  button.addEventListener('click', onClick);
-  
-  return button;
-}
-
-function createGlobalScene() {
-  const scene = document.createElement('a-scene');
-  const assets = document.createElement('a-assets');
-  const lemmingWalk = document.createElement('a-asset-item');
-  const floor = document.createElement('img');
-  const wall = document.createElement('img');
-  
-  scene.setAttribute('physics', 'debug: false; friction: 0; restitution: 0;');
-  scene.appendChild(assets);
-  
-  assets.appendChild(lemmingWalk);
-  assets.appendChild(floor);
-  assets.appendChild(wall);
-  lemmingWalk.id = 'lemming_walk_r';
-  lemmingWalk.setAttribute('src', './Models/lemming_walk_r.glb');
-  floor.setAttribute('src', './Textures/floor.jpg');
-  floor.id = 'texture_floor';
-  wall.setAttribute('src', './Textures/wall.jpg');
-  wall.id = 'texture_wall';
-  
-  document.body.appendChild(scene);
-}
-
-
-
-function startGame(selectedMode, level) 
+window.onload = function() 
 {
 	lemmingId = 0;
 	objectId = 0;
 	lemmingsArrived = 0;
-  mode = selectedMode;
-  
-  
-  createGlobalScene();
 
 	setInterval(checkFalling, 20); // 50 times per second. Could also be checked each time a frame is produced
 	//lemmings will be spawned by hand later
 
-  //set the toolbar for user interface, which includes the buttons to spawn and assign roles
-  if (mode === 'ar') {
-    setARToolBar();
-  } else {
-    setUIToolBar();
-  }
-  
 	//DEMO
-  switch(level) {
-    case '1':
-      setLevel1();
-      break;
-    case '2':
-      setLevel2();
-      break;
-    case '3':
-      setLevel3();
-      break;
-    default:
-      setAlphaLevel();
-      break;
-  }
+	setLevel2();
+	
+
 }
