@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    
+<!--      <script src="https://aframe.io/releases/0.9.1/aframe.min.js"></script> -->
+<!--     <script src="./code.js" defer></script> -->
+<!-- 	<script src="https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.js"></script> -->
+<!-- 	<script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js"></script> -->
+    
+    
+    <script src="./game.js" defer></script>
+    
+    <script type="text/javascript">
+      const scriptsToFetch = [
+        'https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js',
+        'https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.js'
+      ];
+      let fetchedScripts = 0;
+      
+      window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        if (urlParams.get('mode') === 'ar') {
+          scriptsToFetch.push('https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js');
+        }
+        
+        loadScript('https://aframe.io/releases/0.9.1/aframe.min.js', () => {
+          scriptsToFetch.forEach(url => loadScript(url, startGameIfLoaded));
+        });
+      }
+      
+      function loadScript(url, callback) {
+          const script = document.createElement('script');
+          script.src = url;
+          script.addEventListener('load', callback);
+          document.body.appendChild(script);
+      }
+      
+      function startGameIfLoaded() {
+        fetchedScripts++;
+
+        if (fetchedScripts === scriptsToFetch.length) {
+          const urlParams = new URLSearchParams(window.location.search);
+          setTimeout(() => startGame(urlParams.get('mode'), urlParams.get('level')));
+        }
+      }
+    </script>
+    
+    <style>
+      #close-button {
+        position: fixed;
+        z-index: 2;
+        right: 16px;
+        top: 16px;
+        text-decoration: none;
+        background: rosybrown;
+        text-align: center;
+        border-radius: 4px;
+        padding: 8px;
+        line-height: 16px;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+      }
+      
+      #ar-toolbar {
+        position: fixed;
+        bottom: 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+      }
+    </style>
+  </head>  
+  <body>
+    <a id="close-button" href="/">Exit</a>
+<!--     <a-scene physics="debug: false; friction: 0; restitution: 0;"> -->
+<!--       <a-assets> -->
+<!--         <a-asset-item id="lemming_walk_r" src="./Models/lemming_walk_r.glb"></a-asset-item> -->
+<!--         <img id="texture_floor" src="./Textures/floor.jpg"> -->
+<!--         <img id="texture_wall" src="./Textures/wall.jpg"> -->
+<!--       </a-assets> -->
+      <!-- ADD CAMERA BY JAVASCRIPT loadCamera() function -->
+      <!-- ADD EMELENTS BY JAVASCRIPT createBox(...) function -->
+<!--     </a-scene> -->
+  </body>
+</html>

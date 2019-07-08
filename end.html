@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"> 
+  <head>
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/index.css">
+    <style>
+       body {    
+          margin: 0;
+          height: 100vh;
+          background-image: url('./lemmingEnd.jpg');
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center;
+       }
+/*         .button {
+          background-color: skyblue;
+          border: darkgrey;
+          box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+          color: white;
+          padding: 12px 32px;
+          border-radius: 50%;
+          font-size: 27px;
+          height: 150px;
+          width: 150px;
+          cursor: pointer;
+          position: relative;
+          left: 50%;
+          top: calc(100vh - 300px);
+          display: inline-block;
+        }
+
+        .button:hover {
+          background-color: orange;
+          color: white;
+        } */
+      
+      #finish-text {
+        display: inline-block;
+        margin: 0 0 0 50%;
+        transform: translateX(-50%);
+        color: orange;
+        font-size: 32px;
+        padding-top: 32px;
+      }
+      
+      #container button {
+        display: block;
+        margin-bottom: 16px;
+      }
+    </style>
+    
+    <script type="text/javascript">
+      window.onload= function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const result = urlParams.get('result');
+        const level = urlParams.get('level');
+        const mode = urlParams.get('mode');
+        
+        if (result === 'victory') {
+          if (Number(level) >= 3) {
+            document.getElementById('finish-text').innerText = 'Congratulations! You have completed the game.';
+            return;
+          }
+          document.getElementById('finish-text').innerText = 'You did it! Try again with a different Level.';
+          const nextLevelHref = encodeURI('/game.html?mode=' + mode + '&level=' + (Number(level)+1));
+          document.getElementById('container').appendChild(getGameLevelButton('Next level', nextLevelHref));
+        } else {
+          document.getElementById('finish-text').innerText = 'Too many lemmings have died! Try again.';
+          const sameLevelHref = encodeURI('/game.html?mode=' + mode + '&level=' + level);
+          document.getElementById('container').appendChild(getGameLevelButton('Retry level', sameLevelHref));
+        }
+      }
+      
+      function getGameLevelButton(text, href) {
+        const button = document.createElement('button');
+        button.classList.add('button');
+        button.innerText = text;
+        button.addEventListener('click', () => window.location.href = href);
+        
+        return button;
+      }
+    </script>
+  </head>
+  <body>
+    <div>
+      <p id="finish-text" />
+    </div>
+    <div id="container">
+      <button id="back-button" class="button" type="button" onclick="window.location.href = '/index.html'">Back to start</button>
+    </div>
+  </body>
+</html>
