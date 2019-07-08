@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    
+    
+     <script src="https://aframe.io/releases/0.9.1/aframe.min.js"></script>
+<!--     <script src="./code.js" defer></script> -->
+	<script src="https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.js"></script>
+	<script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js"></script>
+    
+    
     <script src="./game.js" defer></script>
     
     <script type="text/javascript">
       const scriptsToFetch = [
-        'https://aframe.io/releases/0.9.1/aframe.min.js',
-        'https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.js',
-        'https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js'
+      // 'https://aframe.io/releases/0.9.1/aframe.min.js',
+      //   'https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.js',
+      //   'https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js'
       ];
       let fetchedScripts = 0;
       
@@ -19,6 +27,8 @@
         }
         
         scriptsToFetch.forEach(url => loadScript(url, startGameIfLoaded));
+                  startGame(urlParams.get('mode'), urlParams.get('level'));
+
       }
       
       function loadScript(url, callback) {
@@ -65,7 +75,6 @@
     </style>
   </head>  
   <body>
-<!--     <button id="vrButton" class="button" type="button" onclick="showLevelSelector('vr')">X</button> -->
     <a id="close-button" href="/">Exit</a>
     <a-scene physics="debug: false; friction: 0; restitution: 0;">
 		<a-assets>
