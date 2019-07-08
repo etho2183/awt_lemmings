@@ -37,6 +37,7 @@ function collisionFunction(e)
     if (lemmingsArrived == minLemmingsToWin)
 		{
 			console.log("You won! Please select another level");
+      winLevel();
 		}
 		console.log(this.id + ": reached destination. Removing. Total arrived: " + lemmingsArrived);
 		removeLemming(this.id);
@@ -664,7 +665,7 @@ function setLevel1()
 function setLevel2()
 {
 	loadCamera();
-  minLemmingsToWin(20);
+  minLemmingsToWin = 20;
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
