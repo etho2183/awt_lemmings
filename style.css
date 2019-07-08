@@ -47,3 +47,7 @@ h1 {
   display: block;
   margin-bottom: 8px;
 }
+
+#back-button {
+  background-color: mediumseagreen;
+}

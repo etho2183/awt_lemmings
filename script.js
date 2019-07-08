@@ -6,15 +6,17 @@ function showLevelSelector(gameMode) {
   document.getElementById('mode-buttons-container').style = 'display: none;';
   selectedMode = gameMode;
   
-  appendLevelButtonsContainerToBody();
+  appendLevelButtonsContainer();
   const levelButtonsContainer = document.getElementById('level-buttons-container');
+  levelButtonsContainer.appendChild(getBackButton());
   const levelButtons = getLevelSelectionButtons(3);
   levelButtons.forEach(button => levelButtonsContainer.appendChild(button));
 }
 
-function appendLevelButtonsContainerToBody() {
-  const div = document.createElement('div');
-  div.id = 'level-buttons-container';
+function appendLevelButtonsContainer() {
+  const levelButtonsContainer = document.createElement('div');
+  levelButtonsContainer.id = 'level-buttons-container';
+  document.getElementById('container').appendChild(levelButtonsContainer);
 }
 
 function getLevelSelectionButtons(numberOfLevels) {
@@ -40,9 +42,13 @@ function goToLevel(level) {
 }
 
 function getBackButton() {
-  document.createElement('button');
-  button.innerText = 'Back';
-  button.addEvenetListener('click', () =>)
+  const backButton = document.createElement('button');
+  backButton.id = 'back-button';
+  backButton.classList.add('button');
+  backButton.innerText = 'Back';
+  backButton.addEventListener('click', showModeSelectionButtons);
+  
+  return backButton;
 }
                            
 function showModeSelectionButtons() {
