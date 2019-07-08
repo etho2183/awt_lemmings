@@ -821,21 +821,24 @@ function createARToolBarButton(text, onClick) {
 function createGlobalScene() {
   const scene = document.createElement('a-scene');
   const assets = document.createElement('a-assets');
-  const flo
+  const lemmingWalk = document.createElement('a-asset-item');
+  const floor = document.createElement('img');
+  const wall = document.createElement('img');
+  
   scene.setAttribute('physics', 'debug: false; friction: 0; restitution: 0;');
-  
-  assets.appendChild();
-  assets.appendChild();
-  assets.appendChild();
-  
   scene.appendChild(assets);
   
+  assets.appendChild(lemmingWalk);
+  assets.appendChild(floor);
+  assets.appendChild(wall);
+  lemmingWalk.id = 'lemming_walk_r';
+  lemmingWalk.setAttribute('src', './Models/lemming_walk_r.glb');
+  floor.setAttribute('src', './Textures/floor.jpg');
+  floor.id = 'texture_floor';
+  wall.setAttribute('src', './Textures/wall.jpg');
+  wall.id = 'texture_wall';
+  
   document.body.appendChild(scene);
-  
-  
-        <a-asset-item id="lemming_walk_r" src="./Models/lemming_walk_r.glb"></a-asset-item>
-        <img id="texture_floor" src="./Textures/floor.jpg">
-        <img id="texture_wall" src="./Textures/wall.jpg">
 }
 
 
@@ -846,6 +849,9 @@ function startGame(selectedMode, level)
 	objectId = 0;
 	lemmingsArrived = 0;
   mode = selectedMode;
+  
+  
+  createGlobalScene();
 
 	setInterval(checkFalling, 20); // 50 times per second. Could also be checked each time a frame is produced
 	//lemmings will be spawned by hand later

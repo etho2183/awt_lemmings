@@ -3,7 +3,7 @@
   <head>
     
     
-     <script src="https://aframe.io/releases/0.9.1/aframe.min.js"></script>
+<!--      <script src="https://aframe.io/releases/0.9.1/aframe.min.js"></script> -->
 <!--     <script src="./code.js" defer></script> -->
 <!-- 	<script src="https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.js"></script> -->
 <!-- 	<script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js"></script> -->
@@ -13,7 +13,7 @@
     
     <script type="text/javascript">
       const scriptsToFetch = [
-        // 'https://aframe.io/releases/0.9.1/aframe.min.js',
+        'https://aframe.io/releases/0.9.1/aframe.min.js',
         'https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js',
         'https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.js'
       ];
@@ -23,7 +23,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         
         if (urlParams.get('mode') === 'ar') {
-          scriptsToFetch.unshift('https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js');
+          scriptsToFetch.push('https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js');
         }
         
         scriptsToFetch.forEach(url => loadScript(url, startGameIfLoaded));
@@ -41,7 +41,7 @@
 
         if (fetchedScripts === scriptsToFetch.length) {
           const urlParams = new URLSearchParams(window.location.search);
-          startGame(urlParams.get('mode'), urlParams.get('level'));
+          setTimeout(() => startGame(urlParams.get('mode'), urlParams.get('level')));
         }
       }
     </script>
@@ -74,14 +74,14 @@
   </head>  
   <body>
     <a id="close-button" href="/">Exit</a>
-    <a-scene physics="debug: false; friction: 0; restitution: 0;">
-      <a-assets>
-        <a-asset-item id="lemming_walk_r" src="./Models/lemming_walk_r.glb"></a-asset-item>
-        <img id="texture_floor" src="./Textures/floor.jpg">
-        <img id="texture_wall" src="./Textures/wall.jpg">
-      </a-assets>
+<!--     <a-scene physics="debug: false; friction: 0; restitution: 0;"> -->
+<!--       <a-assets> -->
+<!--         <a-asset-item id="lemming_walk_r" src="./Models/lemming_walk_r.glb"></a-asset-item> -->
+<!--         <img id="texture_floor" src="./Textures/floor.jpg"> -->
+<!--         <img id="texture_wall" src="./Textures/wall.jpg"> -->
+<!--       </a-assets> -->
       <!-- ADD CAMERA BY JAVASCRIPT loadCamera() function -->
       <!-- ADD EMELENTS BY JAVASCRIPT createBox(...) function -->
-    </a-scene>
+<!--     </a-scene> -->
   </body>
 </html>
