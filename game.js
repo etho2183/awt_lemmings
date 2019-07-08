@@ -810,10 +810,8 @@ function createRoleButton(position, sourceOn, sourceOff, onClick)
   };
   
   box.addEventListener('click', () => {
-    const previousSelectedButton = document.querySelector('.role-button[data-selected="true"]');
-    if (previousSelectedButton) {
-      previousSelectedButton.switchOff();
-    }
+    
+    switchSelectedButtonOff();
     
     const wasButtonSelected = box.getAttribute('data-selected') === 'true';
     if (wasButtonSelected) {
@@ -831,6 +829,13 @@ function createRoleButton(position, sourceOn, sourceOff, onClick)
 	document.querySelector("a-scene").appendChild(box);
 }
 
+function switchSelectedButtonOff() {
+  const previousSelectedButton = document.querySelector('.role-button[data-selected="true"]');
+  if (previousSelectedButton) {
+    previousSelectedButton.switchOff();
+  }
+}
+
 function createSpawnButton()
 {
   const box = document.createElement('a-box');
@@ -843,6 +848,7 @@ function createSpawnButton()
       return;
     }
     
+    switchSelectedButtonOff();
     spawnLemming();
   });
   document.querySelector("a-scene").appendChild(box);
