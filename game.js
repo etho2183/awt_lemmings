@@ -258,19 +258,16 @@ function loseLevel() {
   window.location.href = encodeURI('./end.html?result=defeat&level=' + level + '&mode=' + mode);
 }
 
-function stopOthers(idOrLemming)
+function stopOthers(id)
 {
-	let lemming;
-  if (typeof(idOrLemming) === 'string') {
-    	lemming = getLemming(idOrLemming);
+  console.error('HOLA')
+	  let lemming = getLemming(id);
     if (lemming == null) 
     {
       console.log("Invalid lemming ID");
       return false;
-    }
-  } else {
-    lemming = getLemming(idOrLemming.currentTarget.id);
-  }
+    } 
+
 	lemming.removeEventListener("collide", collisionFunction);
 	lemming.setAttribute("task", "stop");
 	updateModel(lemming);
@@ -281,19 +278,15 @@ function stopOthers(idOrLemming)
 	lemming.body.collisionFilterMask = 1+2+4+8;
 }
 
-function digDown(idOrLemming)
+function digDown(id)
 {
-	let lemming;
-  if (typeof(idOrLemming) === 'string') {
-    lemming = getLemming(idOrLemming);
+  console.error('HALLO');
+	let lemming = getLemming(id);
     if (lemming == null) 
     {
       console.log("Invalid lemming ID");
       return false;
     }
-  } else {
-    lemming = getLemming(idOrLemming.currentTarget.id);
-  }
 	lemming.setAttribute("color" , "#55AA55");
 	lemming.body.velocity.set(0,0.1,0);
 	lemming.setAttribute("task", "digDown");
@@ -435,38 +428,27 @@ function removeLemming(id)
 	document.querySelector("a-scene").removeChild(lemming); 
 }
 
-function giveChute(idOrLemming)
+function giveChute(id)
 {
-  let lemming;
-  if (typeof(idOrLemming) === 'string') {
-    	lemming = getLemming(idOrLemming);
-    if (lemming == null) 
-    {
-      console.log("Invalid lemming ID");
-      return false;
-    }
-  } else {
-    lemming = getLemming(idOrLemming.currentTarget.id);
+  let lemming = getLemming(id);
+  if (lemming == null) 
+  {
+    console.log("Invalid lemming ID");
+    return false;
   }
   
 	lemming.setAttribute("hasChute", true);
 }
 
-function buildStairs(idOrLemming, counter)
+function buildStairs(id, counter)
 {
 	if (counter == null) counter = 0;
-  let id;
-  if (typeof(idOrLemming) === 'string') {
-    id = idOrLemming;
-    if (lemming == null) 
-    {
-      console.log("Invalid lemming ID");
-      return false;
-    }
-  } else {
-    id = idOrLemming.currentTarget.id;
+  let lemming = getLemming(id);
+  if (lemming == null) 
+  {
+    console.log("Invalid lemming ID");
+    return false;
   }
-  var lemming = getLemming(id);
 	var dir = lemming.getAttribute("direction");
 
 	if (counter >= 11)	// stair finished, resume walking
@@ -833,24 +815,45 @@ function updateModel(lemming)
 function createRoleButton(position, sourceOn, sourceOff, onClick)
 {
   const box = document.createElement('a-box');
+  box.classList.add('role-button');
   box.setAttribute('position', position);
   box.setAttribute('height', 1);
   box.setAttribute('width', 1);
-  box.setAttribute('src', sourceOff);
+  
+  box.switchOff = () => {
+    box.setAttribute('src', sourceOff);
+    box.setAttribute('data-selected', false);
+    Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('click', onClick));
+  };
+  
+  box.switchOn = () => {
+    box.setAttribute('src', sourceOn);
+    box.setAttribute('data-selected', true);
+    Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('click', onClick));
+  };
+  
   box.addEventListener('click', () => {
-    const wasButtonSelected = box.getAttribute('data-selected');
-    if (wasButtonSelected === 'true') {
-      Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('click', onClick));
-      box.setAttribute('src', sourceOff);
-      box.setAttribute('data-selected', false);
+    const wasButtonSelected = box.getAttribute('data-selected') === 'true';
+    switchSelectedButtonOff();
+    
+    if (wasButtonSelected) {
+      box.switchOff();
     } else {
-      Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('click', onClick));
-      box.setAttribute('src', sourceOn);
-      box.setAttribute('data-selected', true);
+      box.switchOn();
     }
-
   });
+  
+  // By default button is off
+  box.switchOff();
+  
 	document.querySelector("a-scene").appendChild(box);
+}
+
+function switchSelectedButtonOff() {
+  const previousSelectedButton = document.querySelector('.role-button[data-selected="true"]');
+  if (previousSelectedButton) {
+    previousSelectedButton.switchOff();
+  }
 }
 
 function createSpawnButton()
@@ -865,6 +868,7 @@ function createSpawnButton()
       return;
     }
     
+    switchSelectedButtonOff();
     spawnLemming();
   });
   document.querySelector("a-scene").appendChild(box);
@@ -873,10 +877,10 @@ function createSpawnButton()
 function setUIToolBar()
 {	
   createSpawnButton();
-  createRoleButton('-3 -1.3 0', './images/stop.png', './images/stopOff.png', stopOthers);
-  createRoleButton('-2 -1.3 0', './images/dig.png', './images/digOff.png', digDown);
-  createRoleButton('-1 -1.3 0', './images/build.png', './images/buildOff.png', buildStairs);
-  createRoleButton('0 -1.3 0', './images/parachute.png', './images/parachuteOff.png', giveChute);
+  createRoleButton('-3 -1.3 0', './images/stop.png', './images/stopOff.png', event => stopOthers(event.currentTarget.id));
+  createRoleButton('-2 -1.3 0', './images/dig.png', './images/digOff.png', event => digDown(event.currentTarget.id));
+  createRoleButton('-1 -1.3 0', './images/build.png', './images/buildOff.png', event => buildStairs(event.currentTarget.id));
+  createRoleButton('0 -1.3 0', './images/parachute.png', './images/parachuteOff.png', event => giveChute(event.currentTarget.id));
 }
 
 function setARToolBar() {
