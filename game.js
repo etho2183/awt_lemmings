@@ -258,19 +258,15 @@ function loseLevel() {
   window.location.href = encodeURI('/end.html?result=defeat&level=' + level + '&mode=' + mode);
 }
 
-function stopOthers(idOrLemming)
+function stopOthers(id)
 {
-	let lemming;
-  if (typeof(idOrLemming) === 'string') {
-    	lemming = getLemming(idOrLemming);
+	  let lemming = getLemming(id);
     if (lemming == null) 
     {
       console.log("Invalid lemming ID");
       return false;
-    }
-  } else {
-    lemming = getLemming(idOrLemming.currentTarget.id);
-  }
+    } 
+
 	lemming.removeEventListener("collide", collisionFunction);
 	lemming.setAttribute("task", "stop");
 	updateModel(lemming);
@@ -854,7 +850,7 @@ function createSpawnButton()
 function setUIToolBar()
 {	
   createSpawnButton();
-  createRoleButton('-3 -1.3 0', './images/stop.png', './images/stopOff.png', stopOthers);
+  createRoleButton('-3 -1.3 0', './images/stop.png', './images/stopOff.png', event => stopOthers(event.currentTarget.id));
   createRoleButton('-2 -1.3 0', './images/dig.png', './images/digOff.png', digDown);
   createRoleButton('-1 -1.3 0', './images/build.png', './images/buildOff.png', buildStairs);
   createRoleButton('0 -1.3 0', './images/parachute.png', './images/parachuteOff.png', giveChute);
