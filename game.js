@@ -670,7 +670,8 @@ function setLevel1()
 function setLevel2()
 {
 	loadCamera();
-  minLemmingsToWin = 20;
+  minLemmingsToWin = 10;
+  maxLemmings = 10
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
