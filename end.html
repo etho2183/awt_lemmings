@@ -41,12 +41,39 @@
         padding-top: 32px;
       }
     </style>
+    
+    <script type="text/javascript">
+      window.onload= function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const result = urlParams.get('result');
+        const level = urlParams.get('level');
+        const mode = urlParams.get('mode');
+        
+        if (result === 'victory') {
+          document.getElementById('finish-text').innerText = 'You did it! Try again with a different Level.';
+          const nextLevelHref = encodeURI('/game.html?mode=' + mode + '&level=' + (Number(level)+1));
+          document.getElementByID('buttons-container').appendChild(getGameLevelButton('Next level', nextLevelHref));
+        } else {
+          document.getElementById('finish-text').innerText = 'Too many lemmings have died! Try again.';
+        
+          document.getElementByID('buttons-container').appendChild(getGameLevelButton('Next level', nextLevelHref));
+        }
+      }
+      
+      function getGameLevelButton(text, href) {
+        const button = document.createElement('button');
+        button.innerText = text;
+        button.addEventListener('click', () => window.location.href = href);
+        
+        return button;
+      }
+    </script>
   </head>
   <body>
     <div>
-      <p id="finish-text">You did it! Try again with a different Level.</p>
+      <p id="finish-text" />
     </div>
-    <div id="container">
+    <div id="buttons-container">
       <button id="restart-button" class="button" type="button" onclick="window.location.href = '/index.html'">Restart</button>
     </div>
   </body>
