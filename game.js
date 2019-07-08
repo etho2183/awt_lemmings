@@ -414,7 +414,7 @@ function killLemming(id)
 	setTimeout(removeLemming, 2500, id);
   deadLemmings++;
   
-  if((maxLemmings - deadLemmings) > minLemmingsToWin) {
+  if((maxLemmings - deadLemmings) < minLemmingsToWin) {
     loseLevel();
   }
   
