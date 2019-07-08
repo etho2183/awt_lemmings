@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"> 
   <head>
-    <Text>You did it! Try again with a </Text>
-  </head>
-  <body>
-     <style>
+    <style>
        body {    
           margin: 0;
           height: 100vh;
@@ -34,7 +31,21 @@
           background-color: orange;
           color: white;
         }
+      
+      #finish-text {
+        display: inline-block;
+        margin: 0 0 0 50%;
+        transform: translateX(-50%);
+        color: orange;
+        font-size: 32px;
+        padding-top: 16px;
+      }
     </style>
+  </head>
+  <body>
+    <div>
+      <p id="finish-text">You did it! Try again with a different Level.</p>
+    </div>
     <button id="restart-button" class="button" type="button" onclick="window.location.href = '/index.html'">Restart</button>
   </body>
 </html>
