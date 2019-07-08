@@ -2,19 +2,37 @@
 <html lang="en">
   <head>
     <script src="./game.js" defer></script>
-    <script src="https://aframe.io/releases/0.9.1/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.js"></script>
-    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js"></script>
     
     <script type="text/javascript">
+      function loadScript(url, callback) {
+          const script = document.createElement('script');
+          script.src = url;
+          script.addEventListener('load', callback);
+          document.body.appendChild(script);
+      }
+      
+      function startGameIfLoaded() {
+        scriptCount++;
+        
+        if (scriptCount === scriptsToFetch) {
+        const urlParams = new URLSearchParams(window.location.search);
+          startGame(urlParams.get('mode'), urlParams.get('level'))
+        }
+      }
+      
       window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
+        const scriptsToFetch = [
+          'https://aframe.io/releases/0.9.1/aframe.min.js',
+          'https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.js',
+          'https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js'
+        ];
         
         if (urlParams.get('mode') === 'ar') {
-          const script = document.createElement('script');
-          script.src = 'https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js';
-          script.addEventListener('load', () => startGame(urlParams.get('mode'), urlParams.get('level')));
-          document.body.appendChild(script);
+          scriptsToFetch.shift('https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js');
+          
+          loadScript(''https://aframe.io/releases/0.9.1/aframe.min.js');
+          loadScript('https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js');
         } else {
           startGame(urlParams.get('mode'), urlParams.get('level'));
         }
