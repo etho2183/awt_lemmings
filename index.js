@@ -38,7 +38,7 @@ function createLevelButton(level) {
 }
 
 function goToLevel(level) {
-  window.location = encodeURI('/game.html?mode=' + selectedMode +'&level=' + level);
+  window.location = encodeURI('./game.html?mode=' + selectedMode +'&level=' + level);
 }
 
 function getBackButton() {

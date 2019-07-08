@@ -251,11 +251,11 @@ function winLevel()
 {
 	// clearLevel();
   console.log('winLevel() called');
-  window.location.href = encodeURI('/end.html?result=victory&level=' + level + '&mode=' + mode);
+  window.location.href = encodeURI('./end.html?result=victory&level=' + level + '&mode=' + mode);
 }
 
 function loseLevel() {
-  window.location.href = encodeURI('/end.html?result=defeat&level=' + level + '&mode=' + mode);
+  window.location.href = encodeURI('./end.html?result=defeat&level=' + level + '&mode=' + mode);
 }
 
 function stopOthers(idOrLemming)
@@ -672,6 +672,17 @@ function setLevel1()
 	// sizes do not matter
 	createBox(1, 1, 1, "-5 8 0", "", "spawner");
 	createBox(1, 1, 1, "7 1.5 0", "", "exit");
+
+	// animation test
+	//var b2 = document.createElement("gltf-model");
+	//b2.setAttribute("position", "0 10 0");
+	//b2.setAttribute("src", "./Models/test.glb");
+	//b2.setAttribute("animation-mixer");
+	//document.querySelector("a-scene").appendChild(b2);
+
+	//var b = createBox(1, 1, 1, "0 10 0", "", "test");
+	//b.setAttribute("animation-mixer");
+	//b.setAttribute("gltf-model", "./Models/test.glb");
 }
 
 function setLevel2()
@@ -800,7 +811,12 @@ function updateModel(lemming)
 	var model = "";	
 	var hasChute = lemming.getAttribute("hasChute");
 	if (hasChute == "") hasChute = false;
-	if (task == "walking") 							model = "walk";
+	if (task == "walking")
+	{
+		model = "walk_animated";
+		direction = "";
+		lemming.setAttribute("animation-mixer");
+	} 							
 	if ((task == "falling") && (hasChute)) 			model = "chute";
 	if ((task == "falling") && (!hasChute)) 		model = "fall";
 	if (task == "digDown")							model = "digDown";
@@ -808,7 +824,10 @@ function updateModel(lemming)
 	if (task == "dead")								model = "tombstone";
 
 	if (model != "")
+	{
+		var gltf_model = lemming.querySelector("gltf-model");
 		lemming.setAttribute("gltf-model", "./Models/lemming_" + model + direction + ".glb");
+	}
 }
 
 function createRoleButton(position, sourceOn, sourceOff, onClick)
@@ -884,7 +903,7 @@ function createGlobalScene() {
   const lemmingWalk = document.createElement('a-asset-item');
   const floor = document.createElement('img');
   const wall = document.createElement('img');
-  
+
   scene.setAttribute('physics', 'debug: false; friction: 0; restitution: 0;');
   scene.appendChild(assets);
   
