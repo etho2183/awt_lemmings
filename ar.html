@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/style.css">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://aframe.io/releases/0.9.1/aframe.min.js"></script>
+	<script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js"></script>
+	<script src="https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.js"></script>
+    <script src="./code.js"></script>
+	<title>Lemming Game</title>
+  </head>  
+  <body>
+
+    <a-scene physics="debug: false; friction: 0; restitution: 0;">
+		<a-assets>
+			<a-asset-item id="lemming_walk_r" src="./Models/lemming_walk_r.glb"></a-asset-item>
+			<a-asset-item id="lemming_walk_l" src="./Models/lemming_walk_l.glb"></a-asset-item>
+			<a-asset-item id="lemming_fall_r" src="./Models/lemming_fall_r.glb"></a-asset-item>
+			<a-asset-item id="lemming_fall_l" src="./Models/lemming_fall_l.glb"></a-asset-item>
+			<a-asset-item id="lemming_stop" src="./Models/lemming_stop.glb"></a-asset-item>
+			<a-asset-item id="lemming_digDown_glb" src="./Models/lemming_digDown.glb"></a-asset-item>
+			<a-asset-item id="lemming_digDown_gltf" src="./Models/lemming_digDown.gltf"></a-asset-item>
+
+		</a-assets>
+		<a-gltf-model position="0 10 0" src="./Models/test.glb" animation-mixer/>
+		<!-- ADD CAMERA BY JAVASCRIPT loadCamera() function -->
+		<!-- ADD EMELENTS BY JAVASCRIPT createBox(...) function -->
+		<!-- <a-entity id="refresh-button" geometry="primitive: box" material="color: red" position="0 0 -2"></a> -->
+    </a-scene>
+  </body>
+</html>

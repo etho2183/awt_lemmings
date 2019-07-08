@@ -6,7 +6,6 @@ var lemmingHeight = 1;
 var lemmingWidth = 0.5;
 var velocity = 2;
 var lemmingsArrived;
-var mode;
 
 function collisionFunction(e)
 {	
@@ -51,24 +50,10 @@ function collisionFunction(e)
 	var lemmingYPos = this.getAttribute("position").y;
 
 	var delta = otherYPos + otherHeight/2 - (lemmingYPos - lemmingHeight/2);
-	var fallHeight = this.getAttribute("fallingStart") - lemmingYPos;
 	console.log(this.id + ": delta: " + delta + " with " + e.detail.body.el.className);
-	console.log(this.id + ": fallHeight: " + fallHeight);
 
 	// there is no continuous collision checking, only periodically. Fast objects clip into other objects, until a collision is registered
 	// faster objects clip further into other objects, resulting in a higher delta (at vertical speeds). Avoid high acceleration! Mostly caused by falling.
-
-	if ((delta < 0.09) && (delta > -0.09))	// collision with floor
-	{
-		var hasChute = (this.getAttribute("hasChute") == "true");
-		if (!hasChute && (fallHeight > 4.5))
-		{
-			console.log("killing lemming");
-			killLemming(this.id);
-			return;
-		}
-		else 	this.removeAttribute("fallingStart");	
-	}
 
 	console.log(this.id + ": task: " + this.getAttribute("task") + " == falling: " + (this.getAttribute("task") == "falling"));
 	if (this.getAttribute("task") == "falling")
@@ -85,6 +70,14 @@ function collisionFunction(e)
 		return;
 	}
 
+	if ((delta < 0.09) && (delta > -0.09))	// collision with floor
+	{
+		if (this.body.velocity.y < -9.5)
+		{
+			killLemming(this.id);
+			return;
+		}	
+	}
 	if ((delta > 0.09) && (delta < 0.11) && (e.detail.body.el.className == "stair") )	// collision with stair
 	{
 		console.log(this.id + ": walking up stairs");
@@ -266,7 +259,6 @@ function digDownPartTwo(lemming)
 {
 	var floorId = lemming.getAttribute("lastCollision");
 	var floor = document.querySelector("#"+floorId);
-	var floor_type = floor.getAttribute("class");
 	var halfFloorWidth = floor.getAttribute("width") / 2;
 	var floorHeight = floor.getAttribute("height");
 	var floorDepth = floor.getAttribute("depth");
@@ -293,7 +285,7 @@ function digDownPartTwo(lemming)
 
 	// the lemming is not digging at the left end of the floor
 	if (leftWidth > 0) {
-		createBox(leftWidth, floorHeight, floorDepth, leftX + " " + floorPos.y + " " + floorPos.z, floor_type, "");
+		createBox(leftWidth, floorHeight, floorDepth, leftX + " " + floorPos.y + " " + floorPos.z, "floor", "");
 		console.log("left side width: " + leftWidth + " with x: " + leftX);
 	}
 	else // the lemming is digging at the left end of the floor and the tunnel element cannot have the width of lemmingWidth * 2
@@ -305,7 +297,7 @@ function digDownPartTwo(lemming)
 	// the lemming is not digging at the right end of the floor
 	if (rightWidth > 0) 
 	{
-		createBox(rightWidth, floorHeight, floorDepth, rightX + " " + floorPos.y + " " + floorPos.z, floor_type, ""); 
+		createBox(rightWidth, floorHeight, floorDepth, rightX + " " + floorPos.y + " " + floorPos.z, "floor", ""); 
 		console.log("right side width: " + rightWidth + " with x: " + rightX);
 	}
 	else // same as for the left side
@@ -314,8 +306,7 @@ function digDownPartTwo(lemming)
 		if (tunnelWidth < 0) tunnelWidth = tunnelWidth * -1;
 		tunnelX = leftX + leftWidth/2 + tunnelWidth/2;
 	}
-	console.log(floor_type);
-	var tunnel = createBox(tunnelWidth, floorHeight, floorDepth, tunnelX + " " + floorPos.y + " " + floorPos.z, floor_type, "");
+	var tunnel = createBox(tunnelWidth, floorHeight, floorDepth, tunnelX + " " + floorPos.y + " " + floorPos.z, "floor", "");
 	var timerId = setInterval(shrink, 700, tunnel, true);
 	tunnel.setAttribute("shrinker", timerId);
 	tunnel.setAttribute("lemming", lemming.id);
@@ -340,10 +331,6 @@ function shrink(object, vertical)
 		}
 		var pos = object.body.position;
 		object.setAttribute("height", (height-0.1));
-		var type = object.getAttribute("class");
-		var width = object.getAttribute("width");
-		if (type == "wall") 	object.setAttribute("material", "src: #texture_wall; repeat: " + width + " " + (height-0.1));
-		if (type == "floor") 	object.setAttribute("material", "src: #texture_floor; repeat: " + width + " " + (height-0.1));
 		object.setAttribute("position", pos.x + " " + (pos.y - 0.05) + " " + pos.z);
 		object.removeAttribute("static-body");
 		object.setAttribute("static-body", "");
@@ -363,24 +350,8 @@ function killLemming(id)
 		console.log("Invalid lemming ID");
 		return false;
 	}
-	lemming.setAttribute("task", "dead");
-	lemming.body.velocity.x = 0;
-	lemming.body.collisionFilterGroup = 2;
-	lemming.body.collisionFilterMask = 1;
-	updateModel(lemming);
-	setTimeout(removeLemming, 2500, id);
-}
-
-function removeLemming(id)
-{
-	var lemming = getLemming(id);
-	if (lemming == null) 
-	{
-		console.log("Invalid lemming ID");
-		return false;
-	}
 	console.log("Unfortunately, lemming #" + lemming.id.substring(7) + " has died");
-	document.querySelector("a-scene").removeChild(lemming); 
+	document.querySelector("a-scene").removeChild(lemming);
 }
 
 function giveChute(id)
@@ -488,31 +459,15 @@ function updateVelocities(){
 // position is a string ("x y z"), type and id are strings
 function createBox(width, height, depth, position, type, id)
 {
+	var marker = document.createElement("a-marker-camera");
+	marker.setAttribute("preset","barcode");
+
 	var box = document.createElement("a-box");
 	console.log("creating box with " + width + " * " + height + " * " + depth);
-	if ((id == "spawner") || (id == "exit"))
-	{
-		if (id == "spawner")
-		{
-			box.setAttribute("height", 0.3);
-			box.setAttribute("width", 2);
-			box.setAttribute("depth", 2);
-		}
-		else
-		{
-			box.setAttribute("height", 2);
-			box.setAttribute("width", 0.8);
-			box.setAttribute("depth", 2);
-		}
-		
-	}
-	else 
-	{
-		box.setAttribute("width", width);
-		box.setAttribute("height", height);
-		box.setAttribute("depth", depth);
-	}
 	box.setAttribute("static-body", "");
+	box.setAttribute("width", width);
+	box.setAttribute("height", height);
+	box.setAttribute("depth", depth);
 	box.setAttribute("position", position);
 	box.setAttribute("class", type);
 	if(id == "")
@@ -522,20 +477,20 @@ function createBox(width, height, depth, position, type, id)
 	}
 	else box.setAttribute("id", id);
 	var color = "#ffFFFF";
-	if (type == "wall") 	box.setAttribute("material", "src: #texture_wall; repeat: " + width + " " + height);
-	if (type == "floor") 	box.setAttribute("material", "src: #texture_floor; repeat: " + width + " " + height);
-	if (id == "exit") 		box.setAttribute("gltf-model", "./Models/exit.glb");
-	if (id == "spawner") 	box.setAttribute("gltf-model", "./Models/spawner.glb");
-	if (id == "theVoid") color = "#382714";
+	if (type == "wall") color = "#f44141";
+	if (type == "floor") color = "#5a2b08";
+	if ((id == "exit") || (id == "spawner")) color = "#00ff00";
+	if (id == "theVoid") color = "#000000";
 	box.setAttribute("color", color);
 	box.addEventListener("body-loaded", function(e)
 	{
 		this.body.collisionFilterMask = 1+2+4+8;
 	})
 
-	document.querySelector("a-scene").appendChild(box);
-
-	return box;
+	// document.querySelector("a-scene").appendChild(box);
+	marker.appendChild(box);
+	document.querySelector("a-scene").appendChild(marker);
+	// return box;
 }
 
 // currently bugged. Don't use
@@ -558,12 +513,9 @@ function setAlphaLevel()
 	createBox(0.1, 3, 4, "4 1.5 -4", "wall", "");
 	createBox(0.1, 0.1, 4, "4 4 -4", "wall", "");
 	createBox(0.1, 4, 4, "-4 4 -4", "wall", "");
-
+	createBox(1, 0.1, 1, "0.5 5 -4", "", "spawner");
+	createBox(0.1, 1.5, 4, "-4 0.75 -4", "", "exit");
 	createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-
-	// sizes do not matter
-	createBox(1, 1, 1, "0.5 5 -4", "", "spawner");
-	createBox(1, 1, 1, "-4 0.75 -4", "", "exit");
 }
 
 function setLevel1()
@@ -572,37 +524,17 @@ function setLevel1()
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
-	createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
+	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
 	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
 
 	createBox(20, 1, 2, "0 0 0", "floor", "");
-	createBox(20, 2, 2, "0 4 0", "floor", "");
+	createBox(10, 2, 2, "-5 4 0", "floor", "");
 	createBox(1, 12, 2, "-10.5 5.5 0", "wall", "");
 	createBox(1, 12, 2, "10.5 5.5 0", "wall", "");
 	createBox(1, 6, 2, "5 8 0", "wall", "");
 
-	// sizes do not matter
-	createBox(1, 1, 1, "-5 8 0", "", "spawner");
-	createBox(1, 1, 1, "7 1.5 0", "", "exit");
-}
-
-function setLevel2()
-{
-	loadCamera();
-	var sky = document.createElement("a-sky");
-	sky.setAttribute("color", "#9999FF");
-	document.querySelector("a-scene").appendChild(sky);
-	createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
-
-	createBox(25, 1, 2, "0 0 0", "wall", "");
-	createBox(3, 8, 2, "-11 4.5 0", "floor", "");
-	createBox(3, 7, 2, "-8 4 0", "floor", "");
-	createBox(3, 6, 2, "-5 3.5 0", "floor", "");
-
-	// sizes do not matter
-	createBox(1, 1, 1, "-12 11 0", "", "spawner");
-	createBox(1, 1, 1, "7 1.5 0", "", "exit");
+	createBox(1.2, 0.1, 1.2, "-5 8 0", "", "spawner");
+	createBox(1.6, 2, 1.6, "7 1.5 0", "", "exit");
 }
 
 function setLevel3()
@@ -623,9 +555,8 @@ function setLevel3()
 	createBox(14, 0.1, 2, "4 9 0", "floor", "");
 	createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
 
-	// sizes do not matter
-	createBox(1, 1, 1, "-1 11 0", "", "spawner");
-	createBox(1, 1, 1, "10 1 0", "", "exit");
+	createBox(1.2, 0.1, 1.2, "-1 11 0", "", "spawner");
+	createBox(1.6, 2, 1.6, "10 1 0", "", "exit");
 
 	// DEMO solver
 	/*
@@ -665,23 +596,15 @@ function checkFalling()
 		{
 			lemming.body.velocity.x = 0;
 		}
-		if (((task == "walking") || (task == "falling")) && (lemming.body.velocity.y < -2) && (task != "digDown"))
+		if (((task == "walking") || (task == "falling")) && (lemming.body.velocity.y < -2))
 		{
-			if (lemming.getAttribute("task") != "falling")
-			{
-				lemming.setAttribute("fallingStart", lemming.body.position.y);
-				lemming.setAttribute("task", "falling");
-				updateModel(lemming);
-			}
+			lemming.setAttribute("task", "falling");
+			updateModel(lemming);
 			//console.log(lemming.id + ": lemming is falling with speed: " + lemming.body.velocity.y);
 			lemming.setAttribute("color", "orange");
 			lemming.body.velocity.x = 0;
-			if (lemming.getAttribute("hasChute") == "true") 
-			{
-				lemming.body.velocity.set(0, -1.5, 0);
-				updateModel(lemming);
-			}
-			if (lemming.body.velocity.y < -7) lemming.body.velocity.set(0, -7, 0);
+			if (lemming.getAttribute("hasChute") == "true") lemming.body.velocity.set(0, -1.5, 0);
+			if (lemming.body.velocity.y < -10) lemming.body.velocity.set(0, -10, 0);
 		}
 	}
 	lemmings.forEach(updateFall);
@@ -698,48 +621,25 @@ function updateModel(lemming)
 {
 	var task = lemming.getAttribute("task");
 	var dir = lemming.getAttribute("direction");
-	var direction = "";
-	if (dir == "left")  direction = "_l";
-	else				direction = "_r";
-	if ((task == "digDown") || (task == "stop") || (task == "dead")) direction = "";
-
-	var model = "";	
-	var hasChute = lemming.getAttribute("hasChute");
-	if (hasChute == "") hasChute = false;
-	if (task == "walking") 							model = "walk";
-	if ((task == "falling") && (hasChute)) 			model = "chute";
-	if ((task == "falling") && (!hasChute)) 		model = "fall";
-	if (task == "digDown")							model = "digDown";
-	if (task == "stop")								model = "stop";
-	if (task == "dead")								model = "tombstone";
-
-	if (model != "")
-		lemming.setAttribute("gltf-model", "./Models/lemming_" + model + direction + ".glb");
+	if ((task == "walking") && (dir == "left"))		lemming.setAttribute("gltf-model", "./Models/lemming_walk_l.glb");
+	if ((task == "walking") && (dir == "right"))	lemming.setAttribute("gltf-model", "./Models/lemming_walk_r.glb");
+	if ((task == "falling") && (dir == "left"))		lemming.setAttribute("gltf-model", "./Models/lemming_fall_l.glb");
+	if ((task == "falling") && (dir == "right"))	lemming.setAttribute("gltf-model", "./Models/lemming_fall_r.glb");
+	if (task == "digDown")							lemming.setAttribute("gltf-model", "./Models/lemming_digDown.glb");
+	if (task == "stop")								lemming.setAttribute("gltf-model", "./Models/lemming_stop.glb");
 }
 
-function startGame(selectedMode, level) 
+window.onload = function() 
 {
 	lemmingId = 0;
 	objectId = 0;
 	lemmingsArrived = 0;
-  mode = selectedMode;
 
 	setInterval(checkFalling, 20); // 50 times per second. Could also be checked each time a frame is produced
 	//lemmings will be spawned by hand later
 
 	//DEMO
-  switch(level) {
-    case 1:
-      setLevel1();
-      break;
-    case 2:
-      setLevel2();
-      break;
-    case 3:
-      setLevel3();
-      break;
-    default:
-      setAlphaLevel();
-      break;
-  }
+	setLevel1();
+	
+
 }
