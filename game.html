@@ -10,7 +10,7 @@
       window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
         
-        if (urlarams.get('mode') === 'vr') {
+        if (urlParams.get('mode') === 'ar') {
           const script = document.createElement('script');
           script.src = 'https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js';
           document.body.appendChild(script);
