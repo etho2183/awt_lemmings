@@ -540,13 +540,11 @@ function createBox(width, height, depth, position, type, id)
 
   if (mode === 'ar') {
     marker.appendChild(box);
-	document.querySelector("a-scene").appendChild(marker);
-    return
-  
+	  document.querySelector("a-scene").appendChild(marker);
+    return;
+  }
     
 	document.querySelector("a-scene").appendChild(box);
-    
-  } else 
 
 	return box;
 }
