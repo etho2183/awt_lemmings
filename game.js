@@ -801,10 +801,15 @@ function setUIToolBar()
 }
 
 function setARToolBar() {
-  const toll
+  const toolbar = document.createElement('div');
+  toolbar.id = 'ar-toolbar';
+  
+  toolbar.appendChild(createARToolBarButton('Spawn', spawnLemming));
+  
+  document.body.appendChild(toolbar);
 }
 
-function createARTollBarButton(text, onClick) {
+function createARToolBarButton(text, onClick) {
   const button = document.createElement('button');
   button.innerText = text;
   button.classList.add('ar-button');
@@ -826,8 +831,10 @@ function startGame(selectedMode, level)
 	//lemmings will be spawned by hand later
 
   //set the toolbar for user interface, which includes the buttons to spawn and assign roles
-  if ( mode === 'vr') {
-      setUIToolBar();
+  if (mode === 'ar') {
+    setARToolBar();
+  } else {
+    setUIToolBar();
   }
   
 	//DEMO
