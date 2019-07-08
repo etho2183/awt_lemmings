@@ -488,6 +488,11 @@ function updateVelocities(){
 // position is a string ("x y z"), type and id are strings
 function createBox(width, height, depth, position, type, id)
 {
+  if(mode === 'ar') {
+    var marker = document.createElement("a-marker-camera");
+	  marker.setAttribute("preset","barcode");
+  }
+  
 	var box = document.createElement("a-box");
 	console.log("creating box with " + width + " * " + height + " * " + depth);
 	if ((id == "spawner") || (id == "exit"))
@@ -533,7 +538,15 @@ function createBox(width, height, depth, position, type, id)
 		this.body.collisionFilterMask = 1+2+4+8;
 	})
 
+  if (mode === 'ar') {
+    marker.appendChild(box);
+	document.querySelector("a-scene").appendChild(marker);
+    return
+  
+    
 	document.querySelector("a-scene").appendChild(box);
+    
+  } else 
 
 	return box;
 }
@@ -729,13 +742,13 @@ function startGame(selectedMode, level)
 
 	//DEMO
   switch(level) {
-    case 1:
+    case '1':
       setLevel1();
       break;
-    case 2:
+    case '2':
       setLevel2();
       break;
-    case 3:
+    case '3':
       setLevel3();
       break;
     default:
