@@ -38,7 +38,7 @@ function createLevelButton(level) {
 }
 
 function goToLevel(level) {
-  alert(level);
+  window.location = encodeURIComponent()'/vr.html?level=';
 }
 
 function getBackButton() {
