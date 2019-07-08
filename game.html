@@ -19,9 +19,17 @@
           startGame(urlParams.get('mode'), urlParams.get('level'));
         }
       }
-    </script> 
+    </script>
+    
+    <style>
+      #close-button {
+        
+      }
+    </style>
   </head>  
   <body>
+<!--     <button id="vrButton" class="button" type="button" onclick="showLevelSelector('vr')">X</button> -->
+    <a id="close-button" href="/">X</a>
     <a-scene physics="debug: false; friction: 0; restitution: 0;">
 		<a-assets>
 			<a-asset-item id="lemming_walk_r" src="./Models/lemming_walk_r.glb"></a-asset-item>

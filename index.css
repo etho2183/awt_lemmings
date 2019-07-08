@@ -17,8 +17,8 @@ h1 {
 
 #container {
   position: relative;
-  left: calc(50% + 150px);
-  top: 480px;
+  left: 50%;
+  top: 525px;
   display: inline-block;
 }
 
