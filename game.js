@@ -690,6 +690,7 @@ function loadCamera()
 	wrapper.setAttribute("id", "cameraWrapper");
 	var camera = document.createElement("a-camera");
   var cursor = document.createElement("a-cursor");
+  camera.appendChild(cursor);
 	wrapper.appendChild(camera);
 	document.querySelector("a-scene").appendChild(wrapper);
 }
@@ -812,7 +813,9 @@ function startGame(selectedMode, level)
 	//lemmings will be spawned by hand later
 
   //set the toolbar for user interface, which includes the buttons to spawn and assign roles
-  setUIToolBar();
+  if ( mode === 'vr') {
+      setUIToolBar();
+  }
   
 	//DEMO
   switch(level) {

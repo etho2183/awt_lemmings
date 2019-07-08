@@ -13,10 +13,11 @@
         if (urlParams.get('mode') === 'ar') {
           const script = document.createElement('script');
           script.src = 'https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js';
+          script.addEventListener('load', () => startGame(urlParams.get('mode'), urlParams.get('level')));
           document.body.appendChild(script);
+        } else {
+          startGame(urlParams.get('mode'), urlParams.get('level'));
         }
-        
-        startGame(urlParams.get('mode'), urlParams.get('level'));
       }
     </script> 
   </head>  
