@@ -260,6 +260,7 @@ function loseLevel() {
 
 function stopOthers(id)
 {
+  console.error('HOLA')
 	  let lemming = getLemming(id);
     if (lemming == null) 
     {
@@ -279,6 +280,7 @@ function stopOthers(id)
 
 function digDown(id)
 {
+  console.error('HALLO');
 	let lemming = getLemming(id);
     if (lemming == null) 
     {
