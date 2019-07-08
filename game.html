@@ -13,7 +13,6 @@
     
     <script type="text/javascript">
       const scriptsToFetch = [
-        'https://aframe.io/releases/0.9.1/aframe.min.js',
         'https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js',
         'https://cdn.rawgit.com/donmccurdy/aframe-physics-system/v3.3.0/dist/aframe-physics-system.js'
       ];
@@ -26,7 +25,9 @@
           scriptsToFetch.push('https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.2/aframe/build/aframe-ar.js');
         }
         
-        scriptsToFetch.forEach(url => loadScript(url, startGameIfLoaded));
+        loadScript('https://aframe.io/releases/0.9.1/aframe.min.js', () => {
+          scriptsToFetch.forEach(url => loadScript(url, startGameIfLoaded));
+        });
       }
       
       function loadScript(url, callback) {
