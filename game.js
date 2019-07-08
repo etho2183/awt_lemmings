@@ -7,6 +7,7 @@ var lemmingWidth = 0.5;
 var velocity = 2;
 var lemmingsArrived;
 var maxLemmings = 20;
+var deadLemmings = 0;
 var minLemmingsToWin;
 var mode;
 var level;
@@ -411,6 +412,12 @@ function killLemming(id)
 	lemming.body.collisionFilterMask = 1;
 	updateModel(lemming);
 	setTimeout(removeLemming, 2500, id);
+  deadLemmings++;
+  
+  if((maxLemmings - deadLemmings) > minLemmingsToWin) {
+    loseLevel();
+  }
+  
 }
 
 function removeLemming(id)
@@ -834,7 +841,12 @@ function createSpawnButton()
   box.setAttribute('height', 1);
   box.setAttribute('width', 1);
   box.setAttribute('src', './images/spawn.png');
-  box.addEventListener('click', () => {spawnLemming();
+  box.addEventListener('click', () => {
+    if (lemmingId == maxLemmings) {
+      return;
+    }
+    
+    spawnLemming();
   });
   document.querySelector("a-scene").appendChild(box);
 }

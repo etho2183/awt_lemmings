@@ -57,11 +57,11 @@
         const mode = urlParams.get('mode');
         
         if (result === 'victory') {
-          document.getElementById('finish-text').innerText = 'You did it! Try again with a different Level.';
           if (Number(level) >= 3) {
+            document.getElementById('finish-text').innerText = 'Congratulations! You have completed the game.';
             return;
           }
-          
+          document.getElementById('finish-text').innerText = 'You did it! Try again with a different Level.';
           const nextLevelHref = encodeURI('/game.html?mode=' + mode + '&level=' + (Number(level)+1));
           document.getElementById('container').appendChild(getGameLevelButton('Next level', nextLevelHref));
         } else {
