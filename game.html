@@ -23,13 +23,25 @@
     
     <style>
       #close-button {
-        
+        position: fixed;
+        z-index: 2;
+        right: 16px;
+        top: 16px;
+        text-decoration: none;
+        background: rosybrown;
+        text-align: center;
+        border-radius: 4px;
+        padding: 8px;
+        line-height: 16px;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
       }
     </style>
   </head>  
   <body>
 <!--     <button id="vrButton" class="button" type="button" onclick="showLevelSelector('vr')">X</button> -->
-    <a id="close-button" href="/">X</a>
+    <a id="close-button" href="/">Exit</a>
     <a-scene physics="debug: false; friction: 0; restitution: 0;">
 		<a-assets>
 			<a-asset-item id="lemming_walk_r" src="./Models/lemming_walk_r.glb"></a-asset-item>
