@@ -818,6 +818,26 @@ function createARToolBarButton(text, onClick) {
   return button;
 }
 
+function createGlobalScene() {
+  const scene = document.createElement('a-scene');
+  const assets = document.createElement('a-assets');
+  const flo
+  scene.setAttribute('physics', 'debug: false; friction: 0; restitution: 0;');
+  
+  assets.appendChild();
+  assets.appendChild();
+  assets.appendChild();
+  
+  scene.appendChild(assets);
+  
+  document.body.appendChild(scene);
+  
+  
+        <a-asset-item id="lemming_walk_r" src="./Models/lemming_walk_r.glb"></a-asset-item>
+        <img id="texture_floor" src="./Textures/floor.jpg">
+        <img id="texture_wall" src="./Textures/wall.jpg">
+}
+
 
 
 function startGame(selectedMode, level) 
