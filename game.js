@@ -9,6 +9,7 @@ var lemmingsArrived;
 var maxLemmings = 20;
 var minLemmingsToWin;
 var mode;
+var level;
 
 function collisionFunction(e)
 {	
@@ -249,7 +250,11 @@ function winLevel()
 {
 	// clearLevel();
   console.log('winLevel() called');
-  window.location.href = "/end.html";
+  window.location.href = encodeURI('/end.html?result=victory&level=' + level + '&mode=' + mode);
+}
+
+function loseLevel() {
+  window.location.href = encodeURI('/end.html?result=defeat&level=' + level + '&mode=' + mode);
 }
 
 function stopOthers(idOrLemming)
@@ -886,12 +891,13 @@ function createGlobalScene() {
 
 
 
-function startGame(selectedMode, level) 
+function startGame(selectedMode, selectedLevel) 
 {
 	lemmingId = 0;
 	objectId = 0;
 	lemmingsArrived = 0;
   mode = selectedMode;
+  level = selectedLevel;
   
   
   createGlobalScene();
