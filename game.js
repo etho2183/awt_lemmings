@@ -247,7 +247,8 @@ function spawnLemming()
 function winLevel()
 {
 	// clearLevel();
-  console.log('winLevel() called')
+  console.log('winLevel() called');
+  window.location.href = "/end.html";
 }
 
 function stopOthers(idOrLemming)
