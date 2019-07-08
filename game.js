@@ -398,6 +398,7 @@ function killLemming(id)
 		return false;
 	}
 	lemming.setAttribute("task", "dead");
+  console.log("Unfortunately, lemming #" + lemming.id.substring(7) + " has died");
 	lemming.body.velocity.x = 0;
 	lemming.body.collisionFilterGroup = 2;
 	lemming.body.collisionFilterMask = 1;
@@ -414,7 +415,10 @@ function removeLemming(id)
 		return false;
 	}
 	console.log("Unfortunately, lemming #" + lemming.id.substring(7) + " has died");
-	document.querySelector("a-scene").removeChild(lemming); 
+	lemming.removeAttribute("gltf-model");
+	var label = lemming.getChildren();
+	lemming.removeChild(label[0]);
+  document.querySelector("a-scene").removeChild(lemming); 
 }
 
 function giveChute(idOrLemming)
@@ -596,15 +600,15 @@ function createBox(width, height, depth, position, type, id)
 }
 
 // currently bugged. Don't use
-function clearLevel()
-{
-	var scene = document.querySelector("a-scene");
-	while (scene.hasChildNodes())
-	{
-		scene.removeChild(scene.firstChild);
-	}
-	createBox(100, 0.1, 100, "0 0 0", "", "theVoid");
-}
+// function clearLevel()
+// {
+// 	var scene = document.querySelector("a-scene");
+// 	while (scene.hasChildNodes())
+// 	{
+// 		scene.removeChild(scene.firstChild);
+// 	}
+// 	createBox(100, 0.1, 100, "0 0 0", "", "theVoid");
+// }
 
 function setAlphaLevel()
 {
