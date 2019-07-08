@@ -207,12 +207,19 @@ function spawnLemming()
 	lemming.setAttribute("height", lemmingHeight);
 	lemming.setAttribute("depth", lemmingWidth);
 	lemming.setAttribute("color", "#33cc33");
+	lemming.setAttribute("opacity", 0);
 	lemming.setAttribute("lastCollision", "");
 	lemming.setAttribute("id", "lemming"+lemmingId);
 	
 	lemming.setAttribute("task", "falling");
 	//lemming.setAttribute("constraint", "target: #test; collideConnected: false;");
 
+	// append model that can animate
+	var model = document.createElement("a-gltf-model");
+	model.setAttribute("animation-mixer", "");
+	lemming.appendChild(model);
+
+	// append label for identification
 	var text = document.createElement("a-text");
 	text.setAttribute("value", lemmingId);
 	text.setAttribute("position", "0 0 0.5");
@@ -241,7 +248,7 @@ function spawnLemming()
 	latestLemming = lemming;
 	updateModel(lemming);
 	lemmingId++;
-  if (lemmingId == maxLemmings)
+  	if (lemmingId == maxLemmings)
 	{
 		spawner.setAttribute("gltf-model", "./Models/spawner_closed.glb");
 	}
@@ -786,9 +793,9 @@ function updateModel(lemming)
 {
 	var task = lemming.getAttribute("task");
 	var dir = lemming.getAttribute("direction");
-	var direction = "";
-	if (dir == "left")  direction = "_l";
-	else				direction = "_r";
+	var rotation = "";
+	if (dir == "left")  rotation = "0 180 0";
+	else				rotation = "0 0 0";
 	if ((task == "digDown") || (task == "stop") || (task == "dead")) direction = "";
 
 	var model = "";	
@@ -797,8 +804,6 @@ function updateModel(lemming)
 	if (task == "walking")
 	{
 		model = "walk_animated";
-		direction = "";
-		lemming.setAttribute("animation-mixer");
 	} 							
 	if ((task == "falling") && (hasChute)) 			model = "chute";
 	if ((task == "falling") && (!hasChute)) 		model = "fall";
@@ -808,8 +813,9 @@ function updateModel(lemming)
 
 	if (model != "")
 	{
-		var gltf_model = lemming.querySelector("gltf-model");
-		lemming.setAttribute("gltf-model", "./Models/lemming_" + model + direction + ".glb");
+		var gltf_model = lemming.querySelector("a-gltf-model");
+		gltf_model.setAttribute("gltf-model", "./Models/lemming_" + model + ".glb");
+		gltf_model.setAttribute("rotation", rotation);
 	}
 }
 
@@ -905,18 +911,14 @@ function createARToolBarButton(text, onClick) {
 function createGlobalScene() {
   const scene = document.createElement('a-scene');
   const assets = document.createElement('a-assets');
-  const lemmingWalk = document.createElement('a-asset-item');
   const floor = document.createElement('img');
   const wall = document.createElement('img');
 
   scene.setAttribute('physics', 'debug: false; friction: 0; restitution: 0;');
   scene.appendChild(assets);
   
-  assets.appendChild(lemmingWalk);
   assets.appendChild(floor);
   assets.appendChild(wall);
-  lemmingWalk.id = 'lemming_walk_r';
-  lemmingWalk.setAttribute('src', './Models/lemming_walk_r.glb');
   floor.setAttribute('src', './Textures/floor.jpg');
   floor.id = 'texture_floor';
   wall.setAttribute('src', './Textures/wall.jpg');
