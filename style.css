@@ -15,6 +15,12 @@ h1 {
   color: #373fff;
 }
 
+#container {
+  position: relative;
+  left: calc(50% + 150px);
+  top: 480px;
+}
+
 .button {
     background-color: skyblue;
     border: darkgrey;
@@ -32,16 +38,9 @@ h1 {
   color: white;
 }
 
-#vrButton {
-  position: absolute;
-  left: 650px;
-  top: 480px;
-}
-
-#arButton {
-  position: absolute;
-  left: 650px;
-  top: 560px;
+#mode-buttons-container button {
+  display: block;
+  margin-bottom: 16px;
 }
 
 #level-buttons-container button {
