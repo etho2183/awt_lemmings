@@ -588,6 +588,8 @@ function createBox(width, height, depth, position, type, id)
     marker.appendChild(box);
 	  document.querySelector("a-scene").appendChild(marker);
 	  document.querySelector("a-scene").setAttribute("arjs", "debugUIEnabled: false;")
+
+	 
     return;
   }
     
@@ -864,7 +866,22 @@ function setARToolBar() {
   const toolbar = document.createElement('div');
   toolbar.id = 'ar-toolbar';
   
+  
   toolbar.appendChild(createARToolBarButton('Spawn', spawnLemming));
+  toolbar.appendChild(createARToolBarButton('Stop', spawnLemming));
+
+  var button = document.createElement("button");
+button.innerHTML = "Do Something";
+
+// 2. Append somewhere
+var body = document.getElementsByTagName("body")[0];
+body.appendChild(button);
+
+// 3. Add event handler
+button.addEventListener ("click", function() {
+  alert("did something");
+});
+  toolbar.appendChild(createARToolBarButton('', spawnLemming));
   
   document.body.appendChild(toolbar);
 }
@@ -919,7 +936,8 @@ function startGame(selectedMode, selectedLevel)
 
   //set the toolbar for user interface, which includes the buttons to spawn and assign roles
   if (mode === 'ar') {
-    setARToolBar();
+	//setARToolBar();
+	setUIToolBar();
   } else {
     setUIToolBar();
   }
