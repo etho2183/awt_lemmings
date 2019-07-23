@@ -318,8 +318,10 @@ function digDownPartTwo(lemming)
 	var rightWidth = rightBound - lemmingRight;
 	console.log("floorX: " + floorPos.x + " | halfFloorWidth: " + halfFloorWidth + " | lemmingX: " + lemmingX + " | lemmingWidth: " + lemmingWidth);
 	var rightX = lemmingX + lemmingWidth + (rightWidth / 2);
-	
+
 	var scene = document.querySelector("a-scene");
+	
+
   floor.removeAttribute("src");
 	scene.removeChild(floor);
 
@@ -585,6 +587,7 @@ function createBox(width, height, depth, position, type, id)
   if (mode === 'ar') {
     marker.appendChild(box);
 	  document.querySelector("a-scene").appendChild(marker);
+	  document.querySelector("a-scene").setAttribute("arjs", "debugUIEnabled: false;")
     return;
   }
     
