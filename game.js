@@ -182,6 +182,8 @@ function getLemming(id)
 
 function spawnLemming()
 {
+
+	console.log('iddddddd'+lemmingId )
   if (lemmingId == maxLemmings)
 	{
 		console.log("The maximum amount of lemmings (" + maxLemmings + ") is already spawned!");
@@ -630,7 +632,7 @@ function setAlphaLevel()
 	createBox(0.1, 4, 4, "-4 4 -4", "wall", "");
 
 	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-  createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+ // createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
 
 	// sizes do not matter
 	createBox(1, 1, 1, "0.5 5 -4", "", "spawner");
@@ -645,7 +647,7 @@ function setLevel1()
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
 	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-	 createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+	// createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
 	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
 
 	createBox(20, 1, 2, "0 0 0", "floor", "");
@@ -798,6 +800,7 @@ function updateModel(lemming)
 
 function createRoleButton(position, sourceOn, sourceOff, onClick)
 {
+	const toolbar = document.createElement('div');
   const box = document.createElement('a-box');
   box.classList.add('role-button');
   box.setAttribute('position', position);
@@ -834,6 +837,7 @@ function createRoleButton(position, sourceOn, sourceOff, onClick)
   box.switchOff();
   
 	document.querySelector("a-scene").appendChild(box);
+	
 }
 
 function createSpawnButton()
@@ -866,23 +870,88 @@ function setARToolBar() {
   const toolbar = document.createElement('div');
   toolbar.id = 'ar-toolbar';
   
+  const id = event => stopOthers(event.currentTarget.id)
   
-  toolbar.appendChild(createARToolBarButton('Spawn', spawnLemming));
-  toolbar.appendChild(createARToolBarButton('Stop', spawnLemming));
+  //toolbar.appendChild(createARToolBarButton('Spawn', spawnLemming));
 
-  var button = document.createElement("button");
-button.innerHTML = "Do Something";
-
-// 2. Append somewhere
-var body = document.getElementsByTagName("body")[0];
-body.appendChild(button);
-
-// 3. Add event handler
-button.addEventListener ("click", function() {
-  alert("did something");
-});
-  toolbar.appendChild(createARToolBarButton('', spawnLemming));
   
+  
+//   toolbar.appendChild(createARToolBarButton('Stop',event => stopOthers(0) ));
+//   toolbar.appendChild(createARToolBarButton('Dig Down',event => digDown(0) ));
+//   toolbar.appendChild(createARToolBarButton('Paracute Down',event => giveChute(lemmingId) ));
+//   toolbar.appendChild(createARToolBarButton('Build Stairs',event => buildStairs(lemmingId) ));
+var _spawn = document.createElement("button");
+var _stop = document.createElement("button");
+var _dig = document.createElement("button");
+var _para = document.createElement("button");
+
+// button.innerHTML = "Stop";
+_spawn.innerHTML = '<img src="./images/spawn.png" />';
+
+ // 3. Add event handler
+ _spawn.addEventListener ("click", function() {
+	spawnLemming()
+	_stop.innerHTML = '<img src="./images/stop.png" />';
+ 
+   
+   //alert(myid);
+ });
+ toolbar.appendChild(_spawn);
+
+ 
+ // button.innerHTML = "Stop";
+ _stop.innerHTML = '<img src="./images/stop.png" />';
+
+  // 3. Add event handler
+  _stop.addEventListener ("click", function() {
+	  var myid= lemmingId;
+	  myid--;
+	stopOthers(myid);
+	//_stop.innerHTML = '<img src="./images/stopOff.png" />';
+	//alert(myid);
+  });
+  toolbar.appendChild(_stop);
+
+  
+ // _dig.innerHTML = "Dig Down";
+ _dig.innerHTML = '<img src="./images/dig.png" />';
+  // 3. Add event handler
+  _dig.addEventListener ("click", function() {
+	  var myid= lemmingId;
+	  myid--;
+	  digDown(myid);
+//	  _dig.innerHTML = '<img src="./images/digOff.png" />';
+	//alert(myid);
+  });
+  toolbar.appendChild(_dig);
+
+  
+ 
+  _para.innerHTML = "Paracute Down";
+  _para.innerHTML = '<img src="./images/parachute.png" />';
+  // 3. Add event handler
+  _para.addEventListener ("click", function() {
+	  var myid= lemmingId;
+	  myid--;
+	  giveChute(myid);
+//	  _para.innerHTML = '<img src="./images/parachuteOff.png" />';
+//	alert(myid);
+  });
+  toolbar.appendChild(_para);
+
+  var _build = document.createElement("button");
+ // _build.innerHTML = "Build Stairs";
+ _build.innerHTML = '<img src="./images/build.png" />';
+  // 3. Add event handler
+  _build.addEventListener ("click", function() {
+	  var myid= lemmingId;
+	  myid--;
+	  buildStairs(myid);
+	 // _build.innerHTML = '<img src="./images/buildOff.png" />';
+	//alert(myid);
+  });
+  toolbar.appendChild(_build);
+
   document.body.appendChild(toolbar);
 }
 
@@ -936,8 +1005,8 @@ function startGame(selectedMode, selectedLevel)
 
   //set the toolbar for user interface, which includes the buttons to spawn and assign roles
   if (mode === 'ar') {
-	//setARToolBar();
-	setUIToolBar();
+	setARToolBar();
+//	setUIToolBar();
   } else {
     setUIToolBar();
   }
