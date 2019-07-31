@@ -267,8 +267,7 @@ function loseLevel() {
 
 function stopOthers(id)
 {
-  console.error('HOLA')
-	  let lemming = getLemming(id);
+	let lemming = getLemming(id);
     if (lemming == null) 
     {
       console.log("Invalid lemming ID");
@@ -287,7 +286,6 @@ function stopOthers(id)
 
 function digDown(id)
 {
-  console.error('HALLO');
 	let lemming = getLemming(id);
     if (lemming == null) 
     {
@@ -327,8 +325,10 @@ function digDownPartTwo(lemming)
 	var rightWidth = rightBound - lemmingRight;
 	console.log("floorX: " + floorPos.x + " | halfFloorWidth: " + halfFloorWidth + " | lemmingX: " + lemmingX + " | lemmingWidth: " + lemmingWidth);
 	var rightX = lemmingX + lemmingWidth + (rightWidth / 2);
-	
+
 	var scene = document.querySelector("a-scene");
+	
+
   floor.removeAttribute("src");
 	scene.removeChild(floor);
 
@@ -501,7 +501,7 @@ function setStair(pos, direction)
 		stair.setAttribute("width", lemmingWidth);
 		stair.setAttribute("height", 0.1);
 		stair.setAttribute("depth", lemmingWidth+0.2);
-		stair.setAttribute("color", "#5E0011");
+		stair.setAttribute("color", "#663300");
 		stair.setAttribute("class", "stair");
 		stair.setAttribute("id", "obj"+objectId);
 		objectId++;
@@ -544,7 +544,7 @@ function createBox(width, height, depth, position, type, id)
 {
   if(mode === 'ar') {
     var marker = document.createElement("a-marker-camera");
-	  marker.setAttribute("preset","barcode");
+	  marker.setAttribute("preset","kanji");
   }
   
 	var box = document.createElement("a-box");
@@ -595,6 +595,9 @@ function createBox(width, height, depth, position, type, id)
   if (mode === 'ar') {
     marker.appendChild(box);
 	  document.querySelector("a-scene").appendChild(marker);
+	  document.querySelector("a-scene").setAttribute("arjs", "debugUIEnabled: false;")
+
+	 
     return;
   }
     
@@ -635,7 +638,7 @@ function setAlphaLevel()
 	createBox(0.1, 4, 4, "-4 4 -4", "wall", "");
 
 	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-  createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+ // createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
 
 	// sizes do not matter
 	createBox(1, 1, 1, "0.5 5 -4", "", "spawner");
@@ -645,12 +648,12 @@ function setAlphaLevel()
 function setLevel1()
 {
 	loadCamera();
-  	minLemmingsToWin = 5;
+  	minLemmingsToWin = 15;
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
 	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-	createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+	// createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
 	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
 
 	createBox(20, 1, 2, "0 0 0", "floor", "");
@@ -662,29 +665,17 @@ function setLevel1()
 	// sizes do not matter
 	createBox(1, 1, 1, "-5 8 0", "", "spawner");
 	createBox(1, 1, 1, "7 1.5 0", "", "exit");
-
-	// animation test
-	//var b2 = document.createElement("gltf-model");
-	//b2.setAttribute("position", "0 10 0");
-	//b2.setAttribute("src", "./Models/test.glb");
-	//b2.setAttribute("animation-mixer");
-	//document.querySelector("a-scene").appendChild(b2);
-
-	//var b = createBox(1, 1, 1, "0 10 0", "", "test");
-	//b.setAttribute("animation-mixer");
-	//b.setAttribute("gltf-model", "./Models/test.glb");
 }
 
 function setLevel2()
 {
 	loadCamera();
-  minLemmingsToWin = 5;
-  maxLemmings = 10
+  	minLemmingsToWin = 15;
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
 	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-  createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+//   createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
 	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
 
 	createBox(25, 1, 2, "0 0 0", "wall", "");
@@ -700,7 +691,7 @@ function setLevel2()
 function setLevel3()
 {
 	loadCamera();
-  minLemmingsToWin = 5;
+  	minLemmingsToWin = 12;
 	var sky = document.createElement("a-sky");
 	sky.setAttribute("color", "#336699");
 	document.querySelector("a-scene").appendChild(sky);
@@ -715,7 +706,7 @@ function setLevel3()
 	createBox(10, 0.1, 2, "-3 7.5 0", "floor", "");
 	createBox(14, 0.1, 2, "4 9 0", "floor", "");
 	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-  createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+//   createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
 
 	// sizes do not matter
 	createBox(1, 1, 1, "-1 11 0", "", "spawner");
@@ -802,7 +793,7 @@ function updateModel(lemming)
 	var model = "";	
 	var hasChute = lemming.getAttribute("hasChute");
 	if (hasChute == "") hasChute = false;
-	if (task == "walking")							model = "walk_animated";			
+	if (task == "walking") 							model = "walk_animated";
 	if ((task == "falling") && (hasChute)) 			model = "chute";
 	if ((task == "falling") && (!hasChute)) 		model = "fall";
 	if (task == "digDown")							model = "digDown";
@@ -820,6 +811,7 @@ function updateModel(lemming)
 
 function createRoleButton(position, sourceOn, sourceOff, onClick)
 {
+	const toolbar = document.createElement('div');
   const box = document.createElement('a-box');
   box.classList.add('role-button');
   box.setAttribute('position', position);
@@ -829,22 +821,25 @@ function createRoleButton(position, sourceOn, sourceOff, onClick)
   box.switchOff = () => {
     box.setAttribute('src', sourceOff);
     box.setAttribute('data-selected', false);
-    Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('click', onClick));
   };
   
   box.switchOn = () => {
     box.setAttribute('src', sourceOn);
     box.setAttribute('data-selected', true);
-    Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('click', onClick));
   };
   
   box.addEventListener('click', () => {
-    const wasButtonSelected = box.getAttribute('data-selected') === 'true';
-    switchSelectedButtonOff();
+    const previousSelectedButton = document.querySelector('.role-button[data-selected="true"]');
+    if (previousSelectedButton) {
+      previousSelectedButton.switchOff();
+    }
     
+    const wasButtonSelected = box.getAttribute('data-selected') === 'true';
     if (wasButtonSelected) {
+      Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('click', onClick));
       box.switchOff();
     } else {
+      Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('click', onClick));
       box.switchOn();
     }
   });
@@ -853,13 +848,7 @@ function createRoleButton(position, sourceOn, sourceOff, onClick)
   box.switchOff();
   
 	document.querySelector("a-scene").appendChild(box);
-}
-
-function switchSelectedButtonOff() {
-  const previousSelectedButton = document.querySelector('.role-button[data-selected="true"]');
-  if (previousSelectedButton) {
-    previousSelectedButton.switchOff();
-  }
+	
 }
 
 function createSpawnButton()
@@ -874,7 +863,6 @@ function createSpawnButton()
       return;
     }
     
-    switchSelectedButtonOff();
     spawnLemming();
   });
   document.querySelector("a-scene").appendChild(box);
@@ -893,8 +881,88 @@ function setARToolBar() {
   const toolbar = document.createElement('div');
   toolbar.id = 'ar-toolbar';
   
-  toolbar.appendChild(createARToolBarButton('Spawn', spawnLemming));
+  const id = event => stopOthers(event.currentTarget.id)
   
+  //toolbar.appendChild(createARToolBarButton('Spawn', spawnLemming));
+
+  
+  
+//   toolbar.appendChild(createARToolBarButton('Stop',event => stopOthers(0) ));
+//   toolbar.appendChild(createARToolBarButton('Dig Down',event => digDown(0) ));
+//   toolbar.appendChild(createARToolBarButton('Paracute Down',event => giveChute(lemmingId) ));
+//   toolbar.appendChild(createARToolBarButton('Build Stairs',event => buildStairs(lemmingId) ));
+var _spawn = document.createElement("button");
+var _stop = document.createElement("button");
+var _dig = document.createElement("button");
+var _para = document.createElement("button");
+
+// button.innerHTML = "Stop";
+_spawn.innerHTML = '<img src="./images/spawn.png" />';
+
+ // 3. Add event handler
+ _spawn.addEventListener ("click", function() {
+	spawnLemming()
+	_stop.innerHTML = '<img src="./images/stop.png" />';
+ 
+   
+   //alert(myid);
+ });
+ toolbar.appendChild(_spawn);
+
+ 
+ // button.innerHTML = "Stop";
+ _stop.innerHTML = '<img src="./images/stop.png" />';
+
+  // 3. Add event handler
+  _stop.addEventListener ("click", function() {
+	  var myid= lemmingId;
+	  myid--;
+	stopOthers(myid);
+	//_stop.innerHTML = '<img src="./images/stopOff.png" />';
+	//alert(myid);
+  });
+  toolbar.appendChild(_stop);
+
+  
+ // _dig.innerHTML = "Dig Down";
+ _dig.innerHTML = '<img src="./images/dig.png" />';
+  // 3. Add event handler
+  _dig.addEventListener ("click", function() {
+	  var myid= lemmingId;
+	  myid--;
+	  digDown(myid);
+//	  _dig.innerHTML = '<img src="./images/digOff.png" />';
+	//alert(myid);
+  });
+  toolbar.appendChild(_dig);
+
+  
+ 
+  _para.innerHTML = "Paracute Down";
+  _para.innerHTML = '<img src="./images/parachute.png" />';
+  // 3. Add event handler
+  _para.addEventListener ("click", function() {
+	  var myid= lemmingId;
+	  myid--;
+	  giveChute(myid);
+//	  _para.innerHTML = '<img src="./images/parachuteOff.png" />';
+//	alert(myid);
+  });
+  toolbar.appendChild(_para);
+
+  var _build = document.createElement("button");
+ // _build.innerHTML = "Build Stairs";
+ _build.innerHTML = '<img src="./images/build.png" />';
+  // 3. Add event handler
+  _build.addEventListener ("click", function() {
+	  var myid= lemmingId;
+	  myid--;
+	  buildStairs(myid);
+	 // _build.innerHTML = '<img src="./images/buildOff.png" />';
+	//alert(myid);
+  });
+  toolbar.appendChild(_build);
+
   document.body.appendChild(toolbar);
 }
 
@@ -910,20 +978,26 @@ function createARToolBarButton(text, onClick) {
 function createGlobalScene() {
   const scene = document.createElement('a-scene');
   const assets = document.createElement('a-assets');
+  const lemmingWalk = document.createElement('a-asset-item');
   const floor = document.createElement('img');
   const wall = document.createElement('img');
-
+  
   scene.setAttribute('physics', 'debug: false; friction: 0; restitution: 0;');
   scene.appendChild(assets);
   
+  assets.appendChild(lemmingWalk);
   assets.appendChild(floor);
   assets.appendChild(wall);
+  lemmingWalk.id = 'lemming_walk_r';
+  lemmingWalk.setAttribute('src', './Models/lemming_walk_r.glb');
   floor.setAttribute('src', './Textures/floor.jpg');
   floor.id = 'texture_floor';
   wall.setAttribute('src', './Textures/wall.jpg');
   wall.id = 'texture_wall';
   
   document.body.appendChild(scene);
+
+  //createBox(100, 0.1, 100, "0 0 0", "", "theVoid");
 }
 
 
@@ -944,7 +1018,8 @@ function startGame(selectedMode, selectedLevel)
 
   //set the toolbar for user interface, which includes the buttons to spawn and assign roles
   if (mode === 'ar') {
-    setARToolBar();
+	setARToolBar();
+//	setUIToolBar();
   } else {
     setUIToolBar();
   }
