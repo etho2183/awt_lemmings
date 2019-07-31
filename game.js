@@ -747,10 +747,11 @@ function loadCamera()
 	wrapper.setAttribute("id", "cameraWrapper");
 	var camera = document.createElement("a-camera");
   var cursor = document.createElement("a-cursor");
-  cursor.setAttribute('rayOrigin', 'mouse');
   camera.appendChild(cursor);
 	wrapper.appendChild(camera);
 	document.querySelector("a-scene").appendChild(wrapper);
+  // By setting cursor="rayOrigin: mouse" on the scene, we can use the mouse to click elements of the scene (i.e: lemmings)
+  document.querySelector("a-scene").setAttribute('cursor', 'rayOrigin: mouse');
 }
 
 function checkFalling()
