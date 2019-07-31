@@ -2,7 +2,8 @@
 
 The project is a remake of the classic 1991 Lemmings game, developed through WebXR as part of the project "Advanced Web Technologies" at Technical University Berlin. The main goal of this project was to evaluate WebXR through hands-on development and thus understand how to use this JavaScript Web API as well as document down problems that were encountered.
 This project allows the user to play the lemmings game in virtual as well as augmented reality through the browser. It includes a simple HTML webpage, that leads the user to playing one of three levels in either VR or AR. From there on, interaction with the game will depend on the mode.
-**This project is still in its initial stage. It supports simple game play but does not cover all functionality from the original game. In terms of VR/AR, it has not fully explored many functionalities, provided through WebXR and thus is not optimised for actions, such as controller support.**
+
+:warning: *This project is still in its initial stage. It supports simple game play but does not cover all functionality from the original game. In terms of VR/AR, it has not fully explored many functionalities, provided through WebXR and thus is not optimised for actions, such as controller support.*
 
 ## Content
 
@@ -22,35 +23,42 @@ Playing the game in AR, the user would need to allow access to the camera and so
 
 ### Installing
 
-No installation is necessary, as the beauty of WebXR lies in being able to access the project through a simple web browser. However, there are some problems, when using Google Chrome, which do not exist in Mozilla Firefox. The game can be accessed through [this webpage](https://etho2183.github.io/awt_lemmings/)
+No installation is necessary, as the beauty of WebXR lies in being able to access the project through a simple web browser. However, there are some problems, when using Google Chrome, which do not exist in Mozilla Firefox. The game can be accessed through [this webpage](https://etho2183.github.io/awt_lemmings/).
 
 ## Playing The Game
 
 The game is a puzzle about human-like creatures with green hair that fall out of a floating gate at one point of the level and try to reach an exit within it. These creatures behave in the most simple way: They walk towards one side, until they die, hit a wall and turn around or are told to complete a certain task. If walking means certain death, e.g. falling from a cliff, they still continue doing so. The goal of the player is to prevent such self-destructive behavior, since a given amount of lemmings has to reach the exit gate and the path to it is spiked with dangers and traps.
 
-The main page will let you select the game mode you want to run, followed by a level picker to select difficulty, which once selected will start loading the game. The screen will then display the selected scenario as well as a set of buttons that we can use to assign certain tasks to the lemmings as mentioned above. Relating to the screenshot below, starting left to right, such tasks are:
+The main page will let you select the game mode you want to run, followed by a level picker to select difficulty, which once selected will start loading the game. The screen will then display the selected scenario as well as a set of buttons that we can use to assign certain tasks to the lemmings as mentioned above. Relating to *Image 1* as seen below, starting left to right, such tasks are:
 - **Spawn lemming**: Clicking this button will create a new lemming that will fall from the scenario start point.
 - **Stop**: This task will stop the lemming we select, therefore not allowing other lemmings to continue walking in that direction.
 - **Dig**: By digging, a lemming will create a hole in the floor in order to reach a level below.
 - **Build stairs**: This task will make the lemming create a staircase in the scenario in order to overcome obstacles or walk over the abyss.
 - **Parachute**: Clicking this button will give a parachute to the lemming we select, enabling the lemming to fall safely to another level.
 
-With the exception of the spawn button, the rest of the buttons will require you to click on them to select the task you want to assign, and then select the lemming you want to assign it to. More details on the specifics of each task can be found in section Terminal Commands Interaction.
+With the exception of the *spawn* button, the rest of the buttons will require you to click on them to select the task you want to assign, and then select the lemming you want to assign it to. More details on the specifics of each task can be found in section Terminal Commands Interaction.
 
+<img src="https://user-images.githubusercontent.com/23021961/62221504-0ae76c00-b3b2-11e9-9256-4c7942cd8c08.jpg" title="final-game" width="512">
+*Image 1: VR in-game screenshot.*
 
 
 ### Game Play
 
+Playing the game in VR is heavily gaze-based. The player will need to focus their gaze on one of the cubes at the bottom of the screen to choose a functionality, spawn or using a role, and then focus their gaze on a lemming, if they want to assign it a role. While the focus can be done through the moving of their head in a head mounted display, in order to select anything, mouse clicking is still required. The player is also free to choose the distance and angle is wants to play and observe the game. 
+
+In AR, normal buttons are used. Once a marker has been recognized, the game will load into the augmented reality. The buttons are fixed to the screen and can be selected like traditional buttons.
+
+
 ## Terminal Commands Interaction
 
-While this game should be mostly played with the given buttons and selecting based on gaze, it is also possible to directly use the functions in the command window by reading the id from the existing lemmings. This is especially beneficial when trying to play it on the desktop, as the gaze-based interaction can be hard to navigate. The spawned lemmings all carry with them a number, that is visible to the player. These numbers are unique ´id´s, that are needed as input argument to use the function for in the command window.
+While this game should be mostly played with the given buttons and selecting based on gaze, it is also possible to directly use the functions in the command window by reading the id from the existing lemmings. This is especially beneficial when trying to play it on the desktop, as the gaze-based interaction can be hard to navigate. The spawned lemmings all carry with them a number, that is visible to the player. These numbers are unique `id's`, that are needed as input argument to use the function for in the command window.
 
 In order for the game to make sense, we need lemmings. These are usually automatically spawned. But using the below function, one more lemming can be spawned.
 ```
 spawnLemming()
 ```
 
-If more than one lemming is wanted, using the below function with the input argument ´num´ would be easier, as num takes an integer with the number of lemmings to be spawned.
+If more than one lemming is wanted, using the below function with the input argument `num` would be easier, as num takes an integer with the number of lemmings to be spawned.
 ```
 spawnLemmings(num)
 ```
