@@ -39,7 +39,7 @@ The main page will let you select the game mode you want to run, followed by a l
 With the exception of the *spawn* button, the rest of the buttons will require you to click on them to select the task you want to assign, and then select the lemming you want to assign it to. More details on the specifics of each task can be found in section Terminal Commands Interaction.
 
 <img src="https://user-images.githubusercontent.com/23021961/62221504-0ae76c00-b3b2-11e9-9256-4c7942cd8c08.jpg" title="final-game" width="512">
-*Image 1: VR in-game screenshot.*
+<em>Image 1: VR in-game screenshot.</em>
 
 
 ### Game Play
