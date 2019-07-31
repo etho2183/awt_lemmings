@@ -747,6 +747,7 @@ function loadCamera()
 	wrapper.setAttribute("id", "cameraWrapper");
 	var camera = document.createElement("a-camera");
   var cursor = document.createElement("a-cursor");
+  cursor.setAttribute('rayOrigin', 'mouse');
   camera.appendChild(cursor);
 	wrapper.appendChild(camera);
 	document.querySelector("a-scene").appendChild(wrapper);
