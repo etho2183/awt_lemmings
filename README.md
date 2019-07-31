@@ -92,8 +92,11 @@ buildStairs(id, counter)
 ## Known Bugs
 
 Some bugs were encountered during the play, that have not been addressed. These include:
-In AR, we are not able to assign the lemming the role of digging downwards
-
+- In AR, we are not able to assign the lemming the role of digging downwards
+- While a lemming is building stairs, if it hits a wall, it should start building into the opposite direction, however this behaviour does not always work and sometimes it starts building into the other direction from a lower height than expected
+- When spawning many lemmings in a short interval, some freezing happens and when those lemmings fall, it takes some time for them to resume walking
+- When lemmings use the stairs, they sometimes freeze
+- During the fall, lemmings can still be assigned roles. This however causes them to start the roles in mid air and they also stop falling
 
 ## Authors
 
