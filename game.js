@@ -544,7 +544,7 @@ function createBox(width, height, depth, position, type, id)
 {
   if(mode === 'ar') {
     var marker = document.createElement("a-marker-camera");
-	  marker.setAttribute("preset","barcode");
+	  marker.setAttribute("preset","kanji");
   }
   
 	var box = document.createElement("a-box");
@@ -595,6 +595,8 @@ function createBox(width, height, depth, position, type, id)
   if (mode === 'ar') {
     marker.appendChild(box);
 	  document.querySelector("a-scene").appendChild(marker);
+    document.querySelector("a-scene").setAttribute('arjs', 'debugUIEnabled: false;');
+
     return;
   }
     
@@ -635,7 +637,9 @@ function setAlphaLevel()
 	createBox(0.1, 4, 4, "-4 4 -4", "wall", "");
 
 	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-  createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+  if (mode === 'vr') {
+    createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+  }
 
 	// sizes do not matter
 	createBox(1, 1, 1, "0.5 5 -4", "", "spawner");
@@ -650,7 +654,9 @@ function setLevel1()
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
 	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-	createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+  if (mode === 'vr') {
+	  createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+  }
 	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
 
 	createBox(20, 1, 2, "0 0 0", "floor", "");
@@ -684,7 +690,9 @@ function setLevel2()
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
 	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-  createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+  if (mode === 'vr') {
+    createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+  }
 	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
 
 	createBox(25, 1, 2, "0 0 0", "wall", "");
@@ -715,7 +723,9 @@ function setLevel3()
 	createBox(10, 0.1, 2, "-3 7.5 0", "floor", "");
 	createBox(14, 0.1, 2, "4 9 0", "floor", "");
 	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-  createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+  if (mode === 'vr') {
+    createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+  }
 
 	// sizes do not matter
 	createBox(1, 1, 1, "-1 11 0", "", "spawner");
@@ -799,7 +809,7 @@ function updateModel(lemming)
 	var rotation = "";
 	if (dir == "left")  rotation = "0 180 0";
 	else				rotation = "0 0 0";
-	if ((task == "digDown") || (task == "stop") || (task == "dead")) direction = "";
+	if ((task == "digDown") || (task == "stop") || (task == "dead")) dir = "";
 
 	var model = "";	
 	var hasChute = lemming.getAttribute("hasChute");
@@ -822,39 +832,60 @@ function updateModel(lemming)
 
 function createRoleButton(position, sourceOn, sourceOff, onClick)
 {
+  const button = mode === 'ar' ? getARButton() : getVRButton(position);
+  
+  button.switchOff = () => {
+    button.setImage(sourceOff);
+    button.setAttribute('data-selected', false);
+    Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('click', onClick));
+  };
+  
+  button.switchOn = () => {
+    button.setImage(sourceOn);
+    button.setAttribute('data-selected', true);
+    Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('click', onClick));
+  };
+  
+  button.addEventListener('click', () => {
+    const wasButtonSelected = button.getAttribute('data-selected') === 'true';
+    switchSelectedButtonOff();
+    
+    if (wasButtonSelected) {
+      button.switchOff();
+    } else {
+      button.switchOn();
+    }
+  });
+  
+  // By default button is off
+  button.switchOff();
+  
+	return button;
+}
+
+function getVRButton(position) {
   const box = document.createElement('a-box');
   box.classList.add('role-button');
   box.setAttribute('position', position);
   box.setAttribute('height', 1);
   box.setAttribute('width', 1);
   
-  box.switchOff = () => {
-    box.setAttribute('src', sourceOff);
-    box.setAttribute('data-selected', false);
-    Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.removeEventListener('click', onClick));
+  box.setImage = image => box.setAttribute('src', image);
+  
+  return box;
+}
+
+function getARButton() {
+  const button = document.createElement('button');
+  button.classList.add('role-button');
+  button.classList.add('ar-button');
+  
+  button.setImage = (imageUrl) => {
+    button.style.background = `url(${imageUrl}) no-repeat center center`;
+    button.style.backgroundSize = 'contain';
   };
   
-  box.switchOn = () => {
-    box.setAttribute('src', sourceOn);
-    box.setAttribute('data-selected', true);
-    Array.from(document.querySelectorAll('.lemming')).forEach(lemming => lemming.addEventListener('click', onClick));
-  };
-  
-  box.addEventListener('click', () => {
-    const wasButtonSelected = box.getAttribute('data-selected') === 'true';
-    switchSelectedButtonOff();
-    
-    if (wasButtonSelected) {
-      box.switchOff();
-    } else {
-      box.switchOn();
-    }
-  });
-  
-  // By default button is off
-  box.switchOff();
-  
-	document.querySelector("a-scene").appendChild(box);
+  return button;
 }
 
 function switchSelectedButtonOff() {
@@ -866,12 +897,9 @@ function switchSelectedButtonOff() {
 
 function createSpawnButton()
 {
-  const box = document.createElement('a-box');
-  box.setAttribute('position', '-4 -1.3 0');
-  box.setAttribute('height', 1);
-  box.setAttribute('width', 1);
-  box.setAttribute('src', './images/spawn.png');
-  box.addEventListener('click', () => {
+  const button = mode === 'ar' ? getARButton() : getVRButton('-4 -1.3 0');
+  button.setImage('./images/spawn.png');
+  button.addEventListener('click', () => {
     if (lemmingId == maxLemmings) {
       return;
     }
@@ -879,34 +907,31 @@ function createSpawnButton()
     switchSelectedButtonOff();
     spawnLemming();
   });
-  document.querySelector("a-scene").appendChild(box);
+  
+  return button;
 }
 
 function setUIToolBar()
 {	
-  createSpawnButton();
-  createRoleButton('-3 -1.3 0', './images/stop.png', './images/stopOff.png', event => stopOthers(event.currentTarget.id));
-  createRoleButton('-2 -1.3 0', './images/dig.png', './images/digOff.png', event => digDown(event.currentTarget.id));
-  createRoleButton('-1 -1.3 0', './images/build.png', './images/buildOff.png', event => buildStairs(event.currentTarget.id));
-  createRoleButton('0 -1.3 0', './images/parachute.png', './images/parachuteOff.png', event => giveChute(event.currentTarget.id));
+  const container = getButtonsContainer();
+  
+  container.appendChild(createSpawnButton());
+  container.appendChild(createRoleButton('-3 -1.3 0', './images/stop.png', './images/stopOff.png', event => stopOthers(event.currentTarget.id)));
+  container.appendChild(createRoleButton('-2 -1.3 0', './images/dig.png', './images/digOff.png', event => digDown(event.currentTarget.id)));
+  container.appendChild(createRoleButton('-1 -1.3 0', './images/build.png', './images/buildOff.png', event => buildStairs(event.currentTarget.id)));
+  container.appendChild(createRoleButton('0 -1.3 0', './images/parachute.png', './images/parachuteOff.png', event => giveChute(event.currentTarget.id)));
 }
 
-function setARToolBar() {
-  const toolbar = document.createElement('div');
-  toolbar.id = 'ar-toolbar';
+function getButtonsContainer() {
+  if (mode === 'ar') {
+    const toolbar = document.createElement('div');
+    toolbar.id = 'toolbar';
+    
+    document.body.appendChild(toolbar);
+    return toolbar;
+  }
   
-  toolbar.appendChild(createARToolBarButton('Spawn', spawnLemming));
-  
-  document.body.appendChild(toolbar);
-}
-
-function createARToolBarButton(text, onClick) {
-  const button = document.createElement('button');
-  button.innerText = text;
-  button.classList.add('ar-button');
-  button.addEventListener('click', onClick);
-  
-  return button;
+  return document.querySelector("a-scene");
 }
 
 function createGlobalScene() {
@@ -946,7 +971,7 @@ function startGame(selectedMode, selectedLevel)
 
   //set the toolbar for user interface, which includes the buttons to spawn and assign roles
   if (mode === 'ar') {
-    setARToolBar();
+    setUIToolBar();
   } else {
     setUIToolBar();
   }
