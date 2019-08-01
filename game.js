@@ -544,7 +544,7 @@ function createBox(width, height, depth, position, type, id)
 {
   if(mode === 'ar') {
     var marker = document.createElement("a-marker-camera");
-	  marker.setAttribute("preset","barcode");
+	  marker.setAttribute("preset","kanji");
   }
   
 	var box = document.createElement("a-box");
@@ -595,6 +595,9 @@ function createBox(width, height, depth, position, type, id)
   if (mode === 'ar') {
     marker.appendChild(box);
 	  document.querySelector("a-scene").appendChild(marker);
+	  document.querySelector("a-scene").setAttribute("arjs", "debugUIEnabled: false;")
+
+	 
     return;
   }
     
@@ -650,7 +653,7 @@ function setLevel1()
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
 	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-	createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+//	createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
 	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
 
 	createBox(20, 1, 2, "0 0 0", "floor", "");
@@ -684,7 +687,7 @@ function setLevel2()
 	sky.setAttribute("color", "#9999FF");
 	document.querySelector("a-scene").appendChild(sky);
 	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-  createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+ // createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
 	document.querySelector("#cameraWrapper").object3D.position.set(0, 4, 9);
 
 	createBox(25, 1, 2, "0 0 0", "wall", "");
@@ -715,7 +718,7 @@ function setLevel3()
 	createBox(10, 0.1, 2, "-3 7.5 0", "floor", "");
 	createBox(14, 0.1, 2, "4 9 0", "floor", "");
 	// createBox(100, 0.1, 100, "0 -2, -4", "", "theVoid");
-  createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
+ // createBox(100, 0.1, 100, "0 -4, -4", "", "theVoid");
 
 	// sizes do not matter
 	createBox(1, 1, 1, "-1 11 0", "", "spawner");
@@ -892,12 +895,94 @@ function setUIToolBar()
 }
 
 function setARToolBar() {
-  const toolbar = document.createElement('div');
-  toolbar.id = 'ar-toolbar';
+
+	
+	const toolbar = document.createElement('div');
+	toolbar.id = 'ar-toolbar';
+	
+	const id = event => stopOthers(event.currentTarget.id)
+	
+	//toolbar.appendChild(createARToolBarButton('Spawn', spawnLemming));
   
-  toolbar.appendChild(createARToolBarButton('Spawn', spawnLemming));
+	
+	
+  //   toolbar.appendChild(createARToolBarButton('Stop',event => stopOthers(0) ));
+  //   toolbar.appendChild(createARToolBarButton('Dig Down',event => digDown(0) ));
+  //   toolbar.appendChild(createARToolBarButton('Paracute Down',event => giveChute(lemmingId) ));
+  //   toolbar.appendChild(createARToolBarButton('Build Stairs',event => buildStairs(lemmingId) ));
+  var _spawn = document.createElement("button");
+  var _stop = document.createElement("button");
+  var _dig = document.createElement("button");
+  var _para = document.createElement("button");
   
-  document.body.appendChild(toolbar);
+  // button.innerHTML = "Stop";
+  _spawn.innerHTML = '<img src="./images/spawn.png" />';
+  
+   // 3. Add event handler
+   _spawn.addEventListener ("click", function() {
+	  spawnLemming()
+	  _stop.innerHTML = '<img src="./images/stop.png" />';
+   
+	 
+	 //alert(myid);
+   });
+   toolbar.appendChild(_spawn);
+  
+   
+   // button.innerHTML = "Stop";
+   _stop.innerHTML = '<img src="./images/stop.png" />';
+  
+	// 3. Add event handler
+	_stop.addEventListener ("click", function() {
+		var myid= lemmingId;
+		myid--;
+	  stopOthers(myid);
+	  //_stop.innerHTML = '<img src="./images/stopOff.png" />';
+	  //alert(myid);
+	});
+	toolbar.appendChild(_stop);
+  
+	
+   // _dig.innerHTML = "Dig Down";
+   _dig.innerHTML = '<img src="./images/dig.png" />';
+	// 3. Add event handler
+	_dig.addEventListener ("click", function() {
+		var myid= lemmingId;
+		myid--;
+		digDown(myid);
+  //	  _dig.innerHTML = '<img src="./images/digOff.png" />';
+	  //alert(myid);
+	});
+	toolbar.appendChild(_dig);
+  
+	
+   
+	_para.innerHTML = "Paracute Down";
+	_para.innerHTML = '<img src="./images/parachute.png" />';
+	// 3. Add event handler
+	_para.addEventListener ("click", function() {
+		var myid= lemmingId;
+		myid--;
+		giveChute(myid);
+  //	  _para.innerHTML = '<img src="./images/parachuteOff.png" />';
+  //	alert(myid);
+	});
+	toolbar.appendChild(_para);
+  
+	var _build = document.createElement("button");
+   // _build.innerHTML = "Build Stairs";
+   _build.innerHTML = '<img src="./images/build.png" />';
+	// 3. Add event handler
+	_build.addEventListener ("click", function() {
+		var myid= lemmingId;
+		myid--;
+		buildStairs(myid);
+	   // _build.innerHTML = '<img src="./images/buildOff.png" />';
+	  //alert(myid);
+	});
+	toolbar.appendChild(_build);
+  
+	document.body.appendChild(toolbar);
 }
 
 function createARToolBarButton(text, onClick) {
